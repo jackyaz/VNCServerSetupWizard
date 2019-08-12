@@ -35,6 +35,8 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -94,6 +96,7 @@
             // 
             // splitContSubMenu.Panel1
             // 
+            this.splitContSubMenu.Panel1.Controls.Add(this.textBox1);
             this.splitContSubMenu.Panel1.Controls.Add(this.listView1);
             this.splitContSubMenu.Panel1.Controls.Add(this.button1);
             // 
@@ -137,8 +140,10 @@
             // 
             this.listView1.Alignment = System.Windows.Forms.ListViewAlignment.Left;
             this.listView1.AutoArrange = false;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
             this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.Location = new System.Drawing.Point(3, 0);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
@@ -147,7 +152,19 @@
             this.listView1.Size = new System.Drawing.Size(341, 238);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.SmallIcon;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(24, 265);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(344, 20);
+            this.textBox1.TabIndex = 2;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "";
             // 
             // Form1
             // 
@@ -163,6 +180,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).EndInit();
             this.splitContMenu.ResumeLayout(false);
             this.splitContSubMenu.Panel1.ResumeLayout(false);
+            this.splitContSubMenu.Panel1.PerformLayout();
             this.splitContSubMenu.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContSubMenu)).EndInit();
             this.splitContSubMenu.ResumeLayout(false);
@@ -178,6 +196,8 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }
 

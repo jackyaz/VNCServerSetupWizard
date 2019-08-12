@@ -16,6 +16,7 @@ namespace VNC_Server_Setup_Wizard
         {
             InitializeComponent();
             listBxMenu.SelectedIndex = 0;
+            listView1.Columns[0].Width = -1;
         }
 
         /// <summary>
@@ -103,18 +104,30 @@ namespace VNC_Server_Setup_Wizard
                             item.SubItems.Add(user.Sid.ToString());
                             listView1.Items.Add(item);
                             Console.WriteLine(user.SamAccountName + " is a user, with SID: " + user.Sid);
-                            
+
                         }
                         else if (group != null)
                         {
                             ListViewItem item = new ListViewItem(group.SamAccountName);
-                            item.SubItems.Add(group.Sid.ToString());
+                            item.SubItems.Add("%"+group.Sid.ToString());
                             listView1.Items.Add(item);
                             Console.WriteLine(group.SamAccountName + " is a group, with SID: " + group.Sid);
                         }
 
                     }
                 }
+            }
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                textBox1.Text = listView1.SelectedItems[0].SubItems[1].Text;
+            }
+            else
+            {
+                textBox1.Text = "";
             }
         }
     }
