@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace VNC_Connect_Setup_Wizard
+namespace VNC_Server_Setup_Wizard
 {
     public partial class Form1 : Form
     {

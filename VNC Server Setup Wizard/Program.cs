@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace VNC_Connect_Setup_Wizard
+namespace VNC_Server_Setup_Wizard
 {
     static class Program
     {
