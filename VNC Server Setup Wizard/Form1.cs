@@ -4,7 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Tulpep.ActiveDirectoryObjectPicker;
 
@@ -16,6 +19,25 @@ namespace VNC_Server_Setup_Wizard
         {
             InitializeComponent();
             listBxMenu.SelectedIndex = 0;
+            string cloudcreds = File.ReadAllText("C:\\ProgramData\\RealVNC-Service\\vncserver.d\\CloudCredentials.bed");
+            string plantype = cloudcreds.Substring(cloudcreds.LastIndexOf("cloud/plan") + 10, cloudcreds.IndexOf("cloud/principal") - (cloudcreds.LastIndexOf("cloud/plan") + 10));
+            plantype = Regex.Replace(new string(plantype.Where(c => !char.IsControl(c)).ToArray()), @"[^\u0000-\u007F]", string.Empty);
+            cloudcreds = null;
+            switch (plantype)
+            {
+                case "Home":
+                    VNC_Definitions.Plan = VNC_Definitions.PlanType.Home;
+                    break;
+                case "Professional":
+                    VNC_Definitions.Plan = VNC_Definitions.PlanType.Professional;
+                    break;
+                case "Enterprise":
+                    VNC_Definitions.Plan = VNC_Definitions.PlanType.Enterprise;
+                    break;
+            }
+
+            label2.Text = VNC_Definitions.Plan.ToString();
+            plantype = null;
         }
 
         /// <summary>
@@ -60,27 +82,27 @@ namespace VNC_Server_Setup_Wizard
                 case 0:
                     ButtonState(true, btnNext);
                     ButtonState(false, btnBack);
-                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 1:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
-                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 2:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
-                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 3:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
-                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 4:
                     ButtonState(false, btnNext);
                     ButtonState(true, btnBack);
-                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
             }
         }
@@ -103,16 +125,8 @@ namespace VNC_Server_Setup_Wizard
                 ShowAdvancedView = true
             };
 
-
-
-            if (IsDomainMember())
-            {
-                picker.DefaultLocations = Locations.JoinedDomain;
-            }
-            else
-            {
-                picker.DefaultLocations = Locations.LocalComputer;
-            }
+            if (IsDomainMember()) { picker.DefaultLocations = Locations.JoinedDomain; }
+            else { picker.DefaultLocations = Locations.LocalComputer; }
 
             if (picker.ShowDialog() == DialogResult.OK)
             {
@@ -130,19 +144,10 @@ namespace VNC_Server_Setup_Wizard
                         GroupPrincipal group = new GroupPrincipal(prictx);
                         var searcher = new PrincipalSearcher();
 
-
-
                         if (sel.SchemaClassName.ToLower() == "user")
                         {
-                            if (sel.Path.Contains("WinNT"))
-                            {
-                                user.SamAccountName = sel.Name;
-                            }
-                            else
-                            {
-                                user.UserPrincipalName = sel.Upn;
-
-                            }
+                            if (sel.Path.Contains("WinNT")) { user.SamAccountName = sel.Name; }
+                            else { user.UserPrincipalName = sel.Upn; }
                             searcher = new PrincipalSearcher(user);
                             user = searcher.FindOne() as UserPrincipal;
                         }
@@ -159,7 +164,6 @@ namespace VNC_Server_Setup_Wizard
                             item.SubItems.Add(user.Sid.ToString());
                             listView1.Items.Add(item);
                             Console.WriteLine(user.SamAccountName + " is a user, with SID: " + user.Sid);
-
                         }
                         else if (group.Sid != null)
                         {
@@ -186,15 +190,34 @@ namespace VNC_Server_Setup_Wizard
             }
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            listBxMenu.SelectedIndex -= 1;
+        private void btnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
 
-        }
+        private void btnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
 
-        private void btnNext_Click(object sender, EventArgs e)
+        private void TabControlContent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listBxMenu.SelectedIndex += 1;
+            if (tabControlContent.SelectedIndex == 1)
+            {
+                switch (VNC_Definitions.Plan)
+                {
+                    case VNC_Definitions.PlanType.Home:
+                        radioVNCAuth.Enabled = true;
+                        radioSystemAuth.Enabled = false;
+                        radioSingleSignOn.Enabled = false;
+                        radioVNCAuth.Checked = true;
+                        break;
+                    case VNC_Definitions.PlanType.Professional:
+                        radioVNCAuth.Enabled = true;
+                        radioSystemAuth.Enabled = true;
+                        radioSingleSignOn.Enabled = false;
+                        break;
+                    case VNC_Definitions.PlanType.Enterprise:
+                        radioVNCAuth.Enabled = true;
+                        radioSystemAuth.Enabled = true;
+                        if (IsDomainMember()) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; }
+                        break;
+                }
+            }
         }
     }
 }

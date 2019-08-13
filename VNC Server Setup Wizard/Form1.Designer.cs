@@ -31,7 +31,7 @@
             this.listBxMenu = new System.Windows.Forms.ListBox();
             this.splitContMenu = new System.Windows.Forms.SplitContainer();
             this.splitContSubMenu = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControlContent = new System.Windows.Forms.TabControl();
             this.tabPageWelcome = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
             this.tabPageAuth = new System.Windows.Forms.TabPage();
@@ -48,6 +48,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
+            this.radioVNCAuth = new System.Windows.Forms.RadioButton();
+            this.radioSystemAuth = new System.Windows.Forms.RadioButton();
+            this.radioSingleSignOn = new System.Windows.Forms.RadioButton();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -56,7 +61,7 @@
             this.splitContSubMenu.Panel1.SuspendLayout();
             this.splitContSubMenu.Panel2.SuspendLayout();
             this.splitContSubMenu.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabControlContent.SuspendLayout();
             this.tabPageWelcome.SuspendLayout();
             this.tabPageAuth.SuspendLayout();
             this.tabPageUsers.SuspendLayout();
@@ -80,7 +85,7 @@
             "Finish"});
             this.listBxMenu.Location = new System.Drawing.Point(0, 0);
             this.listBxMenu.Name = "listBxMenu";
-            this.listBxMenu.Size = new System.Drawing.Size(139, 469);
+            this.listBxMenu.Size = new System.Drawing.Size(185, 469);
             this.listBxMenu.TabIndex = 0;
             this.listBxMenu.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBxMenu_DrawItem);
             this.listBxMenu.SelectedIndexChanged += new System.EventHandler(this.listBxMenu_SelectedIndexChanged);
@@ -99,8 +104,8 @@
             // splitContMenu.Panel2
             // 
             this.splitContMenu.Panel2.Controls.Add(this.splitContSubMenu);
-            this.splitContMenu.Size = new System.Drawing.Size(572, 469);
-            this.splitContMenu.SplitterDistance = 139;
+            this.splitContMenu.Size = new System.Drawing.Size(764, 469);
+            this.splitContMenu.SplitterDistance = 185;
             this.splitContMenu.TabIndex = 1;
             // 
             // splitContSubMenu
@@ -113,32 +118,33 @@
             // 
             // splitContSubMenu.Panel1
             // 
-            this.splitContSubMenu.Panel1.Controls.Add(this.tabControl1);
+            this.splitContSubMenu.Panel1.Controls.Add(this.tabControlContent);
             // 
             // splitContSubMenu.Panel2
             // 
             this.splitContSubMenu.Panel2.Controls.Add(this.btnNext);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnBack);
-            this.splitContSubMenu.Size = new System.Drawing.Size(429, 469);
+            this.splitContSubMenu.Size = new System.Drawing.Size(575, 469);
             this.splitContSubMenu.SplitterDistance = 414;
             this.splitContSubMenu.TabIndex = 0;
             // 
-            // tabControl1
+            // tabControlContent
             // 
-            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabControl1.Controls.Add(this.tabPageWelcome);
-            this.tabControl1.Controls.Add(this.tabPageAuth);
-            this.tabControl1.Controls.Add(this.tabPageUsers);
-            this.tabControl1.Controls.Add(this.tabPageEncryption);
-            this.tabControl1.Controls.Add(this.tabPageFinish);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.ItemSize = new System.Drawing.Size(0, 1);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(429, 414);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 8;
+            this.tabControlContent.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabControlContent.Controls.Add(this.tabPageWelcome);
+            this.tabControlContent.Controls.Add(this.tabPageAuth);
+            this.tabControlContent.Controls.Add(this.tabPageUsers);
+            this.tabControlContent.Controls.Add(this.tabPageEncryption);
+            this.tabControlContent.Controls.Add(this.tabPageFinish);
+            this.tabControlContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlContent.ItemSize = new System.Drawing.Size(0, 1);
+            this.tabControlContent.Location = new System.Drawing.Point(0, 0);
+            this.tabControlContent.Name = "tabControlContent";
+            this.tabControlContent.SelectedIndex = 0;
+            this.tabControlContent.Size = new System.Drawing.Size(575, 414);
+            this.tabControlContent.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControlContent.TabIndex = 8;
+            this.tabControlContent.SelectedIndexChanged += new System.EventHandler(this.TabControlContent_SelectedIndexChanged);
             // 
             // tabPageWelcome
             // 
@@ -162,11 +168,16 @@
             // 
             // tabPageAuth
             // 
+            this.tabPageAuth.Controls.Add(this.linkLabel2);
+            this.tabPageAuth.Controls.Add(this.linkLabel1);
+            this.tabPageAuth.Controls.Add(this.radioVNCAuth);
+            this.tabPageAuth.Controls.Add(this.radioSystemAuth);
+            this.tabPageAuth.Controls.Add(this.radioSingleSignOn);
             this.tabPageAuth.Controls.Add(this.label3);
             this.tabPageAuth.Location = new System.Drawing.Point(4, 5);
             this.tabPageAuth.Name = "tabPageAuth";
             this.tabPageAuth.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAuth.Size = new System.Drawing.Size(421, 405);
+            this.tabPageAuth.Size = new System.Drawing.Size(567, 405);
             this.tabPageAuth.TabIndex = 1;
             this.tabPageAuth.Text = "tabPage2";
             this.tabPageAuth.UseVisualStyleBackColor = true;
@@ -174,9 +185,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(151, 41);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(139, 22);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 13);
+            this.label3.Size = new System.Drawing.Size(143, 24);
             this.label3.TabIndex = 0;
             this.label3.Text = "Authentication";
             // 
@@ -304,11 +316,67 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
+            // radioVNCAuth
+            // 
+            this.radioVNCAuth.AutoSize = true;
+            this.radioVNCAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioVNCAuth.Location = new System.Drawing.Point(15, 121);
+            this.radioVNCAuth.Name = "radioVNCAuth";
+            this.radioVNCAuth.Size = new System.Drawing.Size(117, 20);
+            this.radioVNCAuth.TabIndex = 1;
+            this.radioVNCAuth.TabStop = true;
+            this.radioVNCAuth.Text = "VNC Password";
+            this.radioVNCAuth.UseVisualStyleBackColor = true;
+            // 
+            // radioSystemAuth
+            // 
+            this.radioSystemAuth.AutoSize = true;
+            this.radioSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSystemAuth.Location = new System.Drawing.Point(15, 151);
+            this.radioSystemAuth.Name = "radioSystemAuth";
+            this.radioSystemAuth.Size = new System.Drawing.Size(348, 20);
+            this.radioSystemAuth.TabIndex = 2;
+            this.radioSystemAuth.TabStop = true;
+            this.radioSystemAuth.Text = "Windows Password (Professional and Enterprise only)";
+            this.radioSystemAuth.UseVisualStyleBackColor = true;
+            // 
+            // radioSingleSignOn
+            // 
+            this.radioSingleSignOn.AutoSize = true;
+            this.radioSingleSignOn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSingleSignOn.Location = new System.Drawing.Point(15, 181);
+            this.radioSingleSignOn.Name = "radioSingleSignOn";
+            this.radioSingleSignOn.Size = new System.Drawing.Size(476, 20);
+            this.radioSingleSignOn.TabIndex = 3;
+            this.radioSingleSignOn.TabStop = true;
+            this.radioSingleSignOn.Text = "Single Sign On (Enterprise only, requires computer to be joined to a Domain)";
+            this.radioSingleSignOn.UseVisualStyleBackColor = true;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(370, 157);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "linkLabel1";
+            // 
+            // linkLabel2
+            // 
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.Location = new System.Drawing.Point(497, 185);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(55, 13);
+            this.linkLabel2.TabIndex = 5;
+            this.linkLabel2.TabStop = true;
+            this.linkLabel2.Text = "linkLabel2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(572, 469);
+            this.ClientSize = new System.Drawing.Size(764, 469);
             this.Controls.Add(this.splitContMenu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "Form1";
@@ -321,7 +389,7 @@
             this.splitContSubMenu.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContSubMenu)).EndInit();
             this.splitContSubMenu.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.tabControlContent.ResumeLayout(false);
             this.tabPageWelcome.ResumeLayout(false);
             this.tabPageWelcome.PerformLayout();
             this.tabPageAuth.ResumeLayout(false);
@@ -349,7 +417,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControlContent;
         private System.Windows.Forms.TabPage tabPageWelcome;
         private System.Windows.Forms.TabPage tabPageAuth;
         private System.Windows.Forms.TabPage tabPageUsers;
@@ -357,6 +425,11 @@
         private System.Windows.Forms.TabPage tabPageFinish;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton radioSystemAuth;
+        private System.Windows.Forms.RadioButton radioVNCAuth;
+        private System.Windows.Forms.RadioButton radioSingleSignOn;
+        private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 
