@@ -13,6 +13,8 @@ namespace VNC_Server_Setup_Wizard
 
         public enum Authentication {  VNCAuth, SystemAuth, SingleSignOn_SystemAuth }
 
+        public static readonly string credentialfile = "C:\\ProgramData\\RealVNC-Service\\vncserver.d\\CloudCredentials.bed";
+
         private static PlanType plan;
 
         public static PlanType Plan

@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace VNC_Server_Setup_Wizard
 {
-    public enum RegHives { HKLM, HKCU }
+    public enum RegHives { HKLM_License, HKLM }
 
     /// <summary>
     /// A class to manage reading/writing to specific Registry keys
@@ -33,7 +33,8 @@ namespace VNC_Server_Setup_Wizard
         public static string GetRegistryValue(RegHives reg, string valuename)
         {
             RegistryKey regkey;
-            regkey = RegistryManagement.GetHKLM().OpenSubKey("SOFTWARE\\RealVNC\\vncserver", false);
+            if (reg == RegHives.HKLM) { regkey = RegistryManagement.GetHKLM().OpenSubKey("SOFTWARE\\RealVNC\\vncserver", false); }
+            else { regkey = RegistryManagement.GetHKLM().OpenSubKey("SOFTWARE\\RealVNC", false); }
             string value = "";
             try { value = regkey.GetValue(valuename).ToString(); regkey.Close(); }
             catch { }
@@ -49,7 +50,8 @@ namespace VNC_Server_Setup_Wizard
         public static void SetRegistryValue(RegHives reg, string valuename, string value)
         {
             RegistryKey regkey;
-            regkey = RegistryManagement.GetHKLM().CreateSubKey("SOFTWARE\\RealVNC\\vncserver", true);
+            if (reg == RegHives.HKLM) { regkey = RegistryManagement.GetHKLM().CreateSubKey("SOFTWARE\\RealVNC\\vncserver", true); }
+            else { regkey = RegistryManagement.GetHKLM().CreateSubKey("SOFTWARE\\RealVNC", true); }
             regkey.SetValue(valuename, value, RegistryValueKind.String);
             regkey.Close();
         }

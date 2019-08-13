@@ -13,47 +13,50 @@ using Tulpep.ActiveDirectoryObjectPicker;
 
 namespace VNC_Server_Setup_Wizard
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
             listBxMenu.SelectedIndex = 0;
-            string cloudcreds = File.ReadAllText("C:\\ProgramData\\RealVNC-Service\\vncserver.d\\CloudCredentials.bed");
-            string plantype = cloudcreds.Substring(cloudcreds.LastIndexOf("cloud/plan") + 10, cloudcreds.IndexOf("cloud/principal") - (cloudcreds.LastIndexOf("cloud/plan") + 10));
-            plantype = Regex.Replace(new string(plantype.Where(c => !char.IsControl(c)).ToArray()), @"[^\u0000-\u007F]", string.Empty);
-            cloudcreds = null;
+            string cloudcreds = "";
+            string plantype = "";
+            if (File.Exists(VNC_Definitions.credentialfile))
+            {
+                cloudcreds = File.ReadAllText(VNC_Definitions.credentialfile);
+                plantype = cloudcreds.Substring(cloudcreds.LastIndexOf("cloud/plan") + 10, cloudcreds.IndexOf("cloud/principal") - (cloudcreds.LastIndexOf("cloud/plan") + 10));
+                plantype = Regex.Replace(new string(plantype.Where(c => !char.IsControl(c)).ToArray()), @"[^\u0000-\u007F]", string.Empty);
+                cloudcreds = null;
+            }
+            else if (RegistryManagement.GetRegistryValue(RegHives.HKLM_License,"vncserver_license").Length > 1)
+            {
+                plantype = "Enterprise";
+            }
+
             switch (plantype)
             {
                 case "Home":
                     VNC_Definitions.Plan = VNC_Definitions.PlanType.Home;
+                    radioVNCAuth.Checked = true;
+                    radio128.Checked = true;
                     break;
                 case "Professional":
                     VNC_Definitions.Plan = VNC_Definitions.PlanType.Professional;
+                    radioSystemAuth.Checked = true;
+                    radio128.Checked = true;
                     break;
                 case "Enterprise":
                     VNC_Definitions.Plan = VNC_Definitions.PlanType.Enterprise;
+                    radioSystemAuth.Checked = true;
+                    radio256.Checked = true;
+                    break;
+                default:
+                    MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!",MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    plantype = null;
+                    Environment.Exit(0);
                     break;
             }
-
-            label2.Text = VNC_Definitions.Plan.ToString();
             plantype = null;
-        }
-
-        /// <summary>
-        /// Determines whether the local machine is a member of a domain.
-        /// </summary>
-        /// <returns>A boolean value that indicated whether the local machine is a member of a domain.</returns>
-        /// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa394102%28v=vs.85%29.aspx</remarks>
-        public bool IsDomainMember()
-        {
-            System.Management.ManagementObject ComputerSystem;
-            using (ComputerSystem = new System.Management.ManagementObject(String.Format("Win32_ComputerSystem.Name='{0}'", Environment.MachineName)))
-            {
-                ComputerSystem.Get();
-                object Result = ComputerSystem["PartOfDomain"];
-                return (Result != null && (bool)Result);
-            }
         }
 
         private void listBxMenu_DrawItem(object sender, DrawItemEventArgs e)
@@ -107,15 +110,11 @@ namespace VNC_Server_Setup_Wizard
             }
         }
 
-        private void ButtonState(bool showhide, Button button)
-        {
-            button.Enabled = showhide;
-            button.Visible = showhide;
-        }
+        private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DirectoryObjectPickerDialog test = new DirectoryObjectPickerDialog();
+            bool domainmember = WindowsLogon.DomainMember;
             DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
             {
                 AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups | ObjectTypes.WellKnownPrincipals,
@@ -125,7 +124,7 @@ namespace VNC_Server_Setup_Wizard
                 ShowAdvancedView = true
             };
 
-            if (IsDomainMember()) { picker.DefaultLocations = Locations.JoinedDomain; }
+            if (domainmember) { picker.DefaultLocations = Locations.JoinedDomain; }
             else { picker.DefaultLocations = Locations.LocalComputer; }
 
             if (picker.ShowDialog() == DialogResult.OK)
@@ -136,7 +135,7 @@ namespace VNC_Server_Setup_Wizard
                     {
                         ContextType ctxtype;
 
-                        if (IsDomainMember()) { ctxtype = ContextType.Domain; }
+                        if (domainmember) { ctxtype = ContextType.Domain; }
                         else { ctxtype = ContextType.Machine; }
 
                         PrincipalContext prictx = new PrincipalContext(ctxtype);
@@ -162,27 +161,24 @@ namespace VNC_Server_Setup_Wizard
                         {
                             ListViewItem item = new ListViewItem(user.SamAccountName);
                             item.SubItems.Add(user.Sid.ToString());
-                            listView1.Items.Add(item);
-                            Console.WriteLine(user.SamAccountName + " is a user, with SID: " + user.Sid);
+                            listViewUsersGroups.Items.Add(item);
                         }
                         else if (group.Sid != null)
                         {
                             ListViewItem item = new ListViewItem(group.SamAccountName);
                             item.SubItems.Add("%" + group.Sid.ToString());
-                            listView1.Items.Add(item);
-                            Console.WriteLine(group.SamAccountName + " is a group, with SID: " + group.Sid);
+                            listViewUsersGroups.Items.Add(item);
                         }
-
                     }
                 }
             }
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
+            if (listViewUsersGroups.SelectedItems.Count > 0)
             {
-                textBox1.Text = listView1.SelectedItems[0].SubItems[1].Text;
+                textBox1.Text = listViewUsersGroups.SelectedItems[0].SubItems[1].Text;
             }
             else
             {
@@ -194,27 +190,57 @@ namespace VNC_Server_Setup_Wizard
 
         private void btnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
 
-        private void TabControlContent_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabControlContent_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlContent.SelectedIndex == 1)
             {
+                bool passwordenabled = WindowsLogon.PasswordEnabled;
+                if (!passwordenabled)
+                {
+                    lblPasswordWarning.Text = "WARNING: There is no password defined for your Windows user.\n\rYou will need to set a password to use Windows password!";
+                }
+
+                bool domainmember = WindowsLogon.DomainMember;
+                if (!domainmember)
+                {
+                    lblDomainInfo.Text = "INFORMATION: This computer is not joined to a domain.";
+                }
+
                 switch (VNC_Definitions.Plan)
                 {
                     case VNC_Definitions.PlanType.Home:
                         radioVNCAuth.Enabled = true;
                         radioSystemAuth.Enabled = false;
                         radioSingleSignOn.Enabled = false;
-                        radioVNCAuth.Checked = true;
                         break;
                     case VNC_Definitions.PlanType.Professional:
                         radioVNCAuth.Enabled = true;
-                        radioSystemAuth.Enabled = true;
+                        radioSystemAuth.Enabled = passwordenabled;
                         radioSingleSignOn.Enabled = false;
                         break;
                     case VNC_Definitions.PlanType.Enterprise:
                         radioVNCAuth.Enabled = true;
-                        radioSystemAuth.Enabled = true;
-                        if (IsDomainMember()) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; }
+                        radioSystemAuth.Enabled = passwordenabled;
+                        if (domainmember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; }
+                        break;
+                }
+            }
+
+            if (tabControlContent.SelectedIndex == 3)
+            {
+                switch (VNC_Definitions.Plan)
+                {
+                    case VNC_Definitions.PlanType.Home:
+                        radio128.Enabled = true;
+                        radio256.Enabled = false;
+                        break;
+                    case VNC_Definitions.PlanType.Professional:
+                        radio128.Enabled = true;
+                        radio256.Enabled = false;
+                        break;
+                    case VNC_Definitions.PlanType.Enterprise:
+                        radio128.Enabled = true;
+                        radio256.Enabled = true;
                         break;
                 }
             }
