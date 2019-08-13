@@ -16,7 +16,6 @@ namespace VNC_Server_Setup_Wizard
         {
             InitializeComponent();
             listBxMenu.SelectedIndex = 0;
-            listView1.Columns[0].Width = -1;
         }
 
         /// <summary>
@@ -39,14 +38,13 @@ namespace VNC_Server_Setup_Wizard
         {
             // Draw the background of the ListBox control for each item.
             e.DrawBackground();
-            // Define the default color of the brush as black.
-            Brush myBrush;
 
+            // Define the default color of the brush
+            Brush myBrush;
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) { myBrush = Brushes.White; }
             else { myBrush = Brushes.Black; }
 
-            // Draw the current item text based on the current Font 
-            // and the custom brush settings.
+            // Draw the current item text based on the current Font and the custom brush settings.
             SizeF size = e.Graphics.MeasureString(listBxMenu.Items[e.Index].ToString(), e.Font);
             e.Graphics.DrawString(listBxMenu.Items[e.Index].ToString(), e.Font, myBrush, e.Bounds.Left + (e.Bounds.Width / 2 - size.Width / 2), e.Bounds.Top + (e.Bounds.Height / 2 - size.Height / 2), StringFormat.GenericDefault);
 
@@ -57,6 +55,40 @@ namespace VNC_Server_Setup_Wizard
         private void listBxMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
             Console.WriteLine(listBxMenu.SelectedItem.ToString());
+            switch (listBxMenu.SelectedIndex)
+            {
+                case 0:
+                    ButtonState(true, btnNext);
+                    ButtonState(false, btnBack);
+                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    break;
+                case 1:
+                    ButtonState(true, btnNext);
+                    ButtonState(true, btnBack);
+                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    break;
+                case 2:
+                    ButtonState(true, btnNext);
+                    ButtonState(true, btnBack);
+                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    break;
+                case 3:
+                    ButtonState(true, btnNext);
+                    ButtonState(true, btnBack);
+                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    break;
+                case 4:
+                    ButtonState(false, btnNext);
+                    ButtonState(true, btnBack);
+                    tabControl1.SelectTab(listBxMenu.SelectedIndex);
+                    break;
+            }
+        }
+
+        private void ButtonState(bool showhide, Button button)
+        {
+            button.Enabled = showhide;
+            button.Visible = showhide;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -64,13 +96,23 @@ namespace VNC_Server_Setup_Wizard
             DirectoryObjectPickerDialog test = new DirectoryObjectPickerDialog();
             DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
             {
-                AllowedObjectTypes = ObjectTypes.All,
-                DefaultObjectTypes = ObjectTypes.All,
+                AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups | ObjectTypes.WellKnownPrincipals,
+                DefaultObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups | ObjectTypes.WellKnownPrincipals,
                 AllowedLocations = Locations.All,
-                DefaultLocations = Locations.LocalComputer,
                 MultiSelect = true,
                 ShowAdvancedView = true
             };
+
+
+
+            if (IsDomainMember())
+            {
+                picker.DefaultLocations = Locations.JoinedDomain;
+            }
+            else
+            {
+                picker.DefaultLocations = Locations.LocalComputer;
+            }
 
             if (picker.ShowDialog() == DialogResult.OK)
             {
@@ -86,19 +128,32 @@ namespace VNC_Server_Setup_Wizard
                         PrincipalContext prictx = new PrincipalContext(ctxtype);
                         UserPrincipal user = new UserPrincipal(prictx);
                         GroupPrincipal group = new GroupPrincipal(prictx);
+                        var searcher = new PrincipalSearcher();
 
-                        user.SamAccountName = sel.Name;
-                        var searcher = new PrincipalSearcher(user);
-                        user = searcher.FindOne() as UserPrincipal;
 
-                        if (user == null)
+
+                        if (sel.SchemaClassName.ToLower() == "user")
+                        {
+                            if (sel.Path.Contains("WinNT"))
+                            {
+                                user.SamAccountName = sel.Name;
+                            }
+                            else
+                            {
+                                user.UserPrincipalName = sel.Upn;
+
+                            }
+                            searcher = new PrincipalSearcher(user);
+                            user = searcher.FindOne() as UserPrincipal;
+                        }
+                        else if (sel.SchemaClassName.ToLower() == "group")
                         {
                             group.SamAccountName = sel.Name;
                             searcher = new PrincipalSearcher(group);
                             group = searcher.FindOne() as GroupPrincipal;
                         }
 
-                        if (user != null)
+                        if (user.Sid != null)
                         {
                             ListViewItem item = new ListViewItem(user.SamAccountName);
                             item.SubItems.Add(user.Sid.ToString());
@@ -106,10 +161,10 @@ namespace VNC_Server_Setup_Wizard
                             Console.WriteLine(user.SamAccountName + " is a user, with SID: " + user.Sid);
 
                         }
-                        else if (group != null)
+                        else if (group.Sid != null)
                         {
                             ListViewItem item = new ListViewItem(group.SamAccountName);
-                            item.SubItems.Add("%"+group.Sid.ToString());
+                            item.SubItems.Add("%" + group.Sid.ToString());
                             listView1.Items.Add(item);
                             Console.WriteLine(group.SamAccountName + " is a group, with SID: " + group.Sid);
                         }
@@ -129,6 +184,17 @@ namespace VNC_Server_Setup_Wizard
             {
                 textBox1.Text = "";
             }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            listBxMenu.SelectedIndex -= 1;
+
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            listBxMenu.SelectedIndex += 1;
         }
     }
 }
