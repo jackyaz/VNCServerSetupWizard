@@ -16,20 +16,22 @@ namespace VNC_Server_Setup_Wizard
     public partial class frmMain : Form
     {
         bool domainmember = WindowsLogon.DomainMember;
+        VNC_Configuration vncconfig = new VNC_Configuration();
         public frmMain()
         {
             InitializeComponent();
             listBxMenu.SelectedIndex = 0;
+            listViewUsersGroups.Columns[1].Width = -2;
             string cloudcreds = "";
             string plantype = "";
-            if (File.Exists(VNC_Definitions.credentialfile))
+            if (File.Exists(vncconfig.credentialfile))
             {
-                cloudcreds = File.ReadAllText(VNC_Definitions.credentialfile);
+                cloudcreds = File.ReadAllText(vncconfig.credentialfile);
                 plantype = cloudcreds.Substring(cloudcreds.LastIndexOf("cloud/plan") + 10, cloudcreds.IndexOf("cloud/principal") - (cloudcreds.LastIndexOf("cloud/plan") + 10));
                 plantype = Regex.Replace(new string(plantype.Where(c => !char.IsControl(c)).ToArray()), @"[^\u0000-\u007F]", string.Empty);
                 cloudcreds = null;
             }
-            else if (RegistryManagement.GetRegistryValue(RegHives.HKLM_License,"vncserver_license").Length > 1)
+            else if (RegistryManagement.GetRegistryValue(RegHives.HKLM_License, "vncserver_license").Length > 1)
             {
                 plantype = "Enterprise";
             }
@@ -37,22 +39,29 @@ namespace VNC_Server_Setup_Wizard
             switch (plantype)
             {
                 case "Home":
-                    VNC_Definitions.Plan = VNC_Definitions.PlanType.Home;
+                    vncconfig.Plan = VNC_Configuration.PlanType.Home;
                     radioVNCAuth.Checked = true;
                     radio128.Checked = true;
+                    foreach (Control control in pnlFeaturesPaid.Controls)
+                    {
+                        if (control.GetType() == typeof(CheckBox))
+                        {
+                            ((CheckBox)control).Checked = false;
+                        }
+                    }
                     break;
                 case "Professional":
-                    VNC_Definitions.Plan = VNC_Definitions.PlanType.Professional;
+                    vncconfig.Plan = VNC_Configuration.PlanType.Professional;
                     radioSystemAuth.Checked = true;
                     radio128.Checked = true;
                     break;
                 case "Enterprise":
-                    VNC_Definitions.Plan = VNC_Definitions.PlanType.Enterprise;
+                    vncconfig.Plan = VNC_Configuration.PlanType.Enterprise;
                     radioSystemAuth.Checked = true;
                     radio256.Checked = true;
                     break;
                 default:
-                    MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!",MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     plantype = null;
                     Environment.Exit(0);
                     break;
@@ -80,7 +89,6 @@ namespace VNC_Server_Setup_Wizard
 
         private void listBxMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Console.WriteLine(listBxMenu.SelectedItem.ToString());
             switch (listBxMenu.SelectedIndex)
             {
                 case 0:
@@ -104,6 +112,11 @@ namespace VNC_Server_Setup_Wizard
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 4:
+                    ButtonState(true, btnNext);
+                    ButtonState(true, btnBack);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
+                    break;
+                case 5:
                     ButtonState(false, btnNext);
                     ButtonState(true, btnBack);
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
@@ -112,13 +125,14 @@ namespace VNC_Server_Setup_Wizard
         }
 
         private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
+        private void CheckboxState(bool enabledisable, CheckBox chkbox) { chkbox.Enabled = enabledisable; chkbox.Checked = enabledisable; }
 
         private void button1_Click(object sender, EventArgs e)
         {
             DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
             {
-                AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups | ObjectTypes.WellKnownPrincipals,
-                DefaultObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups | ObjectTypes.WellKnownPrincipals,
+                AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups,
+                DefaultObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups,
                 AllowedLocations = Locations.All,
                 MultiSelect = true,
                 ShowAdvancedView = true
@@ -149,23 +163,27 @@ namespace VNC_Server_Setup_Wizard
                             else { user.UserPrincipalName = sel.Upn; }
                             searcher = new PrincipalSearcher(user);
                             user = searcher.FindOne() as UserPrincipal;
+                            if (user == null) { user = new UserPrincipal(prictx); }
                         }
                         else if (sel.SchemaClassName.ToLower() == "group")
                         {
                             group.SamAccountName = sel.Name;
                             searcher = new PrincipalSearcher(group);
                             group = searcher.FindOne() as GroupPrincipal;
+                            if (group == null) { group = new GroupPrincipal(prictx); }
                         }
 
                         if (user.Sid != null)
                         {
-                            ListViewItem item = new ListViewItem(user.SamAccountName);
+                            ListViewItem item = new ListViewItem(sel.SchemaClassName);
+                            item.SubItems.Add(user.SamAccountName);
                             item.SubItems.Add(user.Sid.ToString());
                             listViewUsersGroups.Items.Add(item);
                         }
                         else if (group.Sid != null)
                         {
-                            ListViewItem item = new ListViewItem(group.SamAccountName);
+                            ListViewItem item = new ListViewItem(sel.SchemaClassName);
+                            item.SubItems.Add(group.SamAccountName);
                             item.SubItems.Add("%" + group.Sid.ToString());
                             listViewUsersGroups.Items.Add(item);
                         }
@@ -178,12 +196,18 @@ namespace VNC_Server_Setup_Wizard
         {
             if (listViewUsersGroups.SelectedItems.Count > 0)
             {
-                textBox1.Text = listViewUsersGroups.SelectedItems[0].SubItems[1].Text;
+                textBox1.Text = listViewUsersGroups.SelectedItems[0].SubItems[2].Text;
             }
             else
             {
                 textBox1.Text = "";
             }
+        }
+
+        private void listViewUsersGroups_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.NewWidth = this.listViewUsersGroups.Columns[e.ColumnIndex].Width;
+            e.Cancel = true;
         }
 
         private void btnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
@@ -195,57 +219,81 @@ namespace VNC_Server_Setup_Wizard
             if (tabControlContent.SelectedIndex == 1)
             {
                 bool passwordenabled = WindowsLogon.PasswordEnabled;
-                if (!passwordenabled)
-                {
-                    lblPasswordWarning.Text = "WARNING: There is no password defined for your Windows user.\n\rYou will need to set a password to use Windows password!";
-                }
 
-                bool domainmember = WindowsLogon.DomainMember;
-                if (!domainmember)
+                switch (vncconfig.Plan)
                 {
-                    lblDomainInfo.Text = "INFORMATION: This computer is not joined to a domain.";
-                }
-
-                switch (VNC_Definitions.Plan)
-                {
-                    case VNC_Definitions.PlanType.Home:
+                    case VNC_Configuration.PlanType.Home:
                         radioVNCAuth.Enabled = true;
                         radioSystemAuth.Enabled = false;
                         radioSingleSignOn.Enabled = false;
                         break;
-                    case VNC_Definitions.PlanType.Professional:
+                    case VNC_Configuration.PlanType.Professional:
                         radioVNCAuth.Enabled = true;
                         radioSystemAuth.Enabled = passwordenabled;
-                        lblPasswordWarning.Visible = true;
+                        lblPasswordWarning.Visible = !passwordenabled;
                         radioSingleSignOn.Enabled = false;
                         break;
-                    case VNC_Definitions.PlanType.Enterprise:
+                    case VNC_Configuration.PlanType.Enterprise:
                         radioVNCAuth.Enabled = true;
                         radioSystemAuth.Enabled = passwordenabled;
-                        lblPasswordWarning.Visible = true;
-                        if (domainmember) { radioSingleSignOn.Enabled = true; lblDomainInfo.Visible = true; } else { radioSingleSignOn.Enabled = false; }
+                        lblPasswordWarning.Visible = !passwordenabled;
+                        if (domainmember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; lblDomainInfo.Visible = true; }
+                        break;
+                }
+            }
+
+            if (tabControlContent.SelectedIndex == 2)
+            {
+                switch (vncconfig.Plan)
+                {
+                    case VNC_Configuration.PlanType.Home:
+                        radio128.Enabled = true;
+                        radio256.Enabled = false;
+                        break;
+                    case VNC_Configuration.PlanType.Professional:
+                        radio128.Enabled = true;
+                        radio256.Enabled = false;
+                        break;
+                    case VNC_Configuration.PlanType.Enterprise:
+                        radio128.Enabled = true;
+                        radio256.Enabled = true;
                         break;
                 }
             }
 
             if (tabControlContent.SelectedIndex == 3)
             {
-                switch (VNC_Definitions.Plan)
+                lblFeaturesSubtitle.Text = "Turn on to enable a feature, subject to permissions for individual users or groups.\n\rTurn off to disable a feature; this cannot be overridden.";
+                switch (vncconfig.Plan)
                 {
-                    case VNC_Definitions.PlanType.Home:
-                        radio128.Enabled = true;
-                        radio256.Enabled = false;
+                    case VNC_Configuration.PlanType.Home:
+                        pnlFeatureJoin.Visible = true;
+                        pnlFeatureInfo.Visible = true;
+                        foreach (Control control in pnlFeaturesPaid.Controls)
+                        {
+                            if(control.GetType() == typeof(CheckBox))
+                            {
+                                ((CheckBox)control).Checked = false;
+                                ((CheckBox)control).Enabled = false;
+                            }
+                        }
                         break;
-                    case VNC_Definitions.PlanType.Professional:
-                        radio128.Enabled = true;
-                        radio256.Enabled = false;
+                    case VNC_Configuration.PlanType.Professional:
+                        pnlFeaturesPaid.BorderStyle = BorderStyle.None;
                         break;
-                    case VNC_Definitions.PlanType.Enterprise:
-                        radio128.Enabled = true;
-                        radio256.Enabled = true;
+                    case VNC_Configuration.PlanType.Enterprise:
+                        pnlFeaturesPaid.BorderStyle = BorderStyle.None;
                         break;
                 }
             }
+
+        }
+
+        private void radioAuthType_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioVNCAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.VNCAuth; }
+            if (radioSystemAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SystemAuth; }
+            if (radioSingleSignOn.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SingleSignOn_SystemAuth; }
         }
     }
 }
