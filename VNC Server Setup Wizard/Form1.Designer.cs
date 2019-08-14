@@ -52,14 +52,14 @@
             this.listViewUsersGroups = new System.Windows.Forms.ListView();
             this.columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageEncryption = new System.Windows.Forms.TabPage();
+            this.radio128 = new System.Windows.Forms.RadioButton();
+            this.radio256 = new System.Windows.Forms.RadioButton();
+            this.label2 = new System.Windows.Forms.Label();
             this.lblEncryptionTitle = new System.Windows.Forms.Label();
             this.tabPageFinish = new System.Windows.Forms.TabPage();
             this.lblFinishTitle = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.radio128 = new System.Windows.Forms.RadioButton();
-            this.radio256 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -222,6 +222,7 @@
             this.lblDomainInfo.Size = new System.Drawing.Size(549, 48);
             this.lblDomainInfo.TabIndex = 7;
             this.lblDomainInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDomainInfo.Visible = false;
             // 
             // lblPasswordWarning
             // 
@@ -232,6 +233,7 @@
             this.lblPasswordWarning.Size = new System.Drawing.Size(549, 48);
             this.lblPasswordWarning.TabIndex = 6;
             this.lblPasswordWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblPasswordWarning.Visible = false;
             // 
             // linkLabel2
             // 
@@ -374,6 +376,40 @@
             this.tabPageEncryption.TabIndex = 3;
             this.tabPageEncryption.UseVisualStyleBackColor = true;
             // 
+            // radio128
+            // 
+            this.radio128.AutoSize = true;
+            this.radio128.Checked = true;
+            this.radio128.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radio128.Location = new System.Drawing.Point(9, 96);
+            this.radio128.Name = "radio128";
+            this.radio128.Size = new System.Drawing.Size(95, 20);
+            this.radio128.TabIndex = 10;
+            this.radio128.TabStop = true;
+            this.radio128.Text = "128-bit AES";
+            this.radio128.UseVisualStyleBackColor = true;
+            // 
+            // radio256
+            // 
+            this.radio256.AutoSize = true;
+            this.radio256.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radio256.Location = new System.Drawing.Point(9, 170);
+            this.radio256.Name = "radio256";
+            this.radio256.Size = new System.Drawing.Size(195, 20);
+            this.radio256.TabIndex = 11;
+            this.radio256.Text = "256-bit AES (Enterprise only)";
+            this.radio256.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(6, 42);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(555, 23);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Select the level of encryption you want to use when connecting to this VNC Server" +
+    ".";
+            // 
             // lblEncryptionTitle
             // 
             this.lblEncryptionTitle.AutoSize = true;
@@ -425,40 +461,6 @@
             this.btnBack.Text = "<< Back";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-            // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 42);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(555, 23);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Select the level of encryption you want to use when connecting to this VNC Server" +
-    ".";
-            // 
-            // radio128
-            // 
-            this.radio128.AutoSize = true;
-            this.radio128.Checked = true;
-            this.radio128.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radio128.Location = new System.Drawing.Point(9, 96);
-            this.radio128.Name = "radio128";
-            this.radio128.Size = new System.Drawing.Size(95, 20);
-            this.radio128.TabIndex = 10;
-            this.radio128.TabStop = true;
-            this.radio128.Text = "128-bit AES";
-            this.radio128.UseVisualStyleBackColor = true;
-            // 
-            // radio256
-            // 
-            this.radio256.AutoSize = true;
-            this.radio256.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radio256.Location = new System.Drawing.Point(9, 170);
-            this.radio256.Name = "radio256";
-            this.radio256.Size = new System.Drawing.Size(195, 20);
-            this.radio256.TabIndex = 11;
-            this.radio256.Text = "256-bit AES (Enterprise only)";
-            this.radio256.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 

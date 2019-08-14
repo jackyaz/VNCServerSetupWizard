@@ -15,6 +15,7 @@ namespace VNC_Server_Setup_Wizard
 {
     public partial class frmMain : Form
     {
+        bool domainmember = WindowsLogon.DomainMember;
         public frmMain()
         {
             InitializeComponent();
@@ -114,7 +115,6 @@ namespace VNC_Server_Setup_Wizard
 
         private void button1_Click(object sender, EventArgs e)
         {
-            bool domainmember = WindowsLogon.DomainMember;
             DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
             {
                 AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups | ObjectTypes.WellKnownPrincipals,
@@ -216,12 +216,14 @@ namespace VNC_Server_Setup_Wizard
                     case VNC_Definitions.PlanType.Professional:
                         radioVNCAuth.Enabled = true;
                         radioSystemAuth.Enabled = passwordenabled;
+                        lblPasswordWarning.Visible = true;
                         radioSingleSignOn.Enabled = false;
                         break;
                     case VNC_Definitions.PlanType.Enterprise:
                         radioVNCAuth.Enabled = true;
                         radioSystemAuth.Enabled = passwordenabled;
-                        if (domainmember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; }
+                        lblPasswordWarning.Visible = true;
+                        if (domainmember) { radioSingleSignOn.Enabled = true; lblDomainInfo.Visible = true; } else { radioSingleSignOn.Enabled = false; }
                         break;
                 }
             }
