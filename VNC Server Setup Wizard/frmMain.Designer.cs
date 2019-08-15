@@ -51,6 +51,8 @@
             this.lblEncryptionSubtitle = new System.Windows.Forms.Label();
             this.lblEncryptionTitle = new System.Windows.Forms.Label();
             this.tabPageFeatures = new System.Windows.Forms.TabPage();
+            this.pnlFeatureInfo = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.pnlFeatureJoin = new System.Windows.Forms.Panel();
             this.chkCutText = new System.Windows.Forms.CheckBox();
             this.chkAcceptPointerEvents = new System.Windows.Forms.CheckBox();
@@ -73,8 +75,6 @@
             this.lblFinishTitle = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pnlFeatureInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -404,6 +404,26 @@
             this.tabPageFeatures.TabIndex = 5;
             this.tabPageFeatures.UseVisualStyleBackColor = true;
             // 
+            // pnlFeatureInfo
+            // 
+            this.pnlFeatureInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlFeatureInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pnlFeatureInfo.Location = new System.Drawing.Point(329, 181);
+            this.pnlFeatureInfo.Name = "pnlFeatureInfo";
+            this.pnlFeatureInfo.Size = new System.Drawing.Size(119, 118);
+            this.pnlFeatureInfo.TabIndex = 20;
+            this.pnlFeatureInfo.Text = "These features require a Professional or Enterprise subscription.";
+            this.pnlFeatureInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlFeatureInfo.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(335, 229);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(100, 23);
+            this.label2.TabIndex = 19;
+            // 
             // pnlFeatureJoin
             // 
             this.pnlFeatureJoin.BackColor = System.Drawing.Color.Black;
@@ -424,6 +444,7 @@
             this.chkCutText.TabIndex = 12;
             this.chkCutText.Text = "Copy and paste text in either direction";
             this.chkCutText.UseVisualStyleBackColor = true;
+            this.chkCutText.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // chkAcceptPointerEvents
             // 
@@ -436,6 +457,7 @@
             this.chkAcceptPointerEvents.TabIndex = 11;
             this.chkAcceptPointerEvents.Text = "Control desktop using mouse";
             this.chkAcceptPointerEvents.UseVisualStyleBackColor = true;
+            this.chkAcceptPointerEvents.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // chkAcceptKeyEvents
             // 
@@ -448,6 +470,7 @@
             this.chkAcceptKeyEvents.TabIndex = 10;
             this.chkAcceptKeyEvents.Text = "Control desktop using keyboard";
             this.chkAcceptKeyEvents.UseVisualStyleBackColor = true;
+            this.chkAcceptKeyEvents.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // lblFeaturesSubtitle
             // 
@@ -494,6 +517,7 @@
             this.chkEnableRemotePrinting.TabIndex = 16;
             this.chkEnableRemotePrinting.Text = "Print to a local printer";
             this.chkEnableRemotePrinting.UseVisualStyleBackColor = true;
+            this.chkEnableRemotePrinting.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // chkAudioEnable
             // 
@@ -506,6 +530,7 @@
             this.chkAudioEnable.TabIndex = 13;
             this.chkAudioEnable.Text = "Hear audio from the desktop";
             this.chkAudioEnable.UseVisualStyleBackColor = true;
+            this.chkAudioEnable.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // chkShareFiles
             // 
@@ -518,6 +543,7 @@
             this.chkShareFiles.TabIndex = 15;
             this.chkShareFiles.Text = "Transfer files in either direction";
             this.chkShareFiles.UseVisualStyleBackColor = true;
+            this.chkShareFiles.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // chkEnableChat
             // 
@@ -530,6 +556,7 @@
             this.chkEnableChat.TabIndex = 14;
             this.chkEnableChat.Text = "Chat with other users";
             this.chkEnableChat.UseVisualStyleBackColor = true;
+            this.chkEnableChat.CheckedChanged += new System.EventHandler(this.ChkFeatures_CheckedChanged);
             // 
             // tabPageUsers
             // 
@@ -641,26 +668,6 @@
             this.btnBack.Text = "<< Back";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
-            // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(335, 229);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 23);
-            this.label2.TabIndex = 19;
-            // 
-            // pnlFeatureInfo
-            // 
-            this.pnlFeatureInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlFeatureInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pnlFeatureInfo.Location = new System.Drawing.Point(329, 181);
-            this.pnlFeatureInfo.Name = "pnlFeatureInfo";
-            this.pnlFeatureInfo.Size = new System.Drawing.Size(119, 118);
-            this.pnlFeatureInfo.TabIndex = 20;
-            this.pnlFeatureInfo.Text = "These features require a Professional or Enterprise subscription.";
-            this.pnlFeatureInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.pnlFeatureInfo.Visible = false;
             // 
             // frmMain
             // 

@@ -49,16 +49,19 @@ namespace VNC_Server_Setup_Wizard
                             ((CheckBox)control).Checked = false;
                         }
                     }
+                    VNC_Feature.EnableFreeFeatures(vncconfig);
                     break;
                 case "Professional":
                     vncconfig.Plan = VNC_Configuration.PlanType.Professional;
                     radioSystemAuth.Checked = true;
                     radio128.Checked = true;
+                    VNC_Feature.EnableAllFeatures(vncconfig);
                     break;
                 case "Enterprise":
                     vncconfig.Plan = VNC_Configuration.PlanType.Enterprise;
                     radioSystemAuth.Checked = true;
                     radio256.Checked = true;
+                    VNC_Feature.EnableAllFeatures(vncconfig);
                     break;
                 default:
                     MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -294,6 +297,12 @@ namespace VNC_Server_Setup_Wizard
             if (radioVNCAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.VNCAuth; }
             if (radioSystemAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SystemAuth; }
             if (radioSingleSignOn.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SingleSignOn_SystemAuth; }
+        }
+
+        private void ChkFeatures_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = (CheckBox)sender;
+            VNC_Feature feature = vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", ""));
         }
     }
 }

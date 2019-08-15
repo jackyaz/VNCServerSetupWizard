@@ -18,5 +18,28 @@ namespace VNC_Server_Setup_Wizard
             Name = name;
             Enabled = enabled;
         }
+
+        public static void EnableAllFeatures(VNC_Configuration config)
+        {
+            config.VNCFeatures = new List<VNC_Feature>();
+
+            foreach (FeatureName feature in Enum.GetValues(typeof(FeatureName)))
+            {
+                config.VNCFeatures.Add(new VNC_Feature(feature, true));
+            }
+        }
+
+        public static void EnableFreeFeatures(VNC_Configuration config)
+        {
+            config.VNCFeatures = new List<VNC_Feature>();
+
+            foreach (FeatureName feature in Enum.GetValues(typeof(FeatureName)))
+            {
+                if (feature == FeatureName.CutText || feature == FeatureName.AcceptPointerEvents || feature == FeatureName.AcceptKeyEvents)
+                {
+                    config.VNCFeatures.Add(new VNC_Feature(feature, true));
+                }
+            }
+        }
     }
 }
