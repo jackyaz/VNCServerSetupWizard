@@ -113,8 +113,8 @@
             this.listBxMenu.Size = new System.Drawing.Size(185, 390);
             this.listBxMenu.TabIndex = 0;
             this.listBxMenu.TabStop = false;
-            this.listBxMenu.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBxMenu_DrawItem);
-            this.listBxMenu.SelectedIndexChanged += new System.EventHandler(this.listBxMenu_SelectedIndexChanged);
+            this.listBxMenu.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBxMenu_DrawItem);
+            this.listBxMenu.SelectedIndexChanged += new System.EventHandler(this.ListBxMenu_SelectedIndexChanged);
             // 
             // splitContMenu
             // 
@@ -172,7 +172,7 @@
             this.tabControlContent.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControlContent.TabIndex = 8;
             this.tabControlContent.TabStop = false;
-            this.tabControlContent.SelectedIndexChanged += new System.EventHandler(this.tabControlContent_SelectedIndexChanged);
+            this.tabControlContent.SelectedIndexChanged += new System.EventHandler(this.TabControlContent_SelectedIndexChanged);
             // 
             // tabPageWelcome
             // 
@@ -292,7 +292,7 @@
             this.radioVNCAuth.TabStop = true;
             this.radioVNCAuth.Text = "VNC Password";
             this.radioVNCAuth.UseVisualStyleBackColor = true;
-            this.radioVNCAuth.CheckedChanged += new System.EventHandler(this.radioAuthType_CheckedChanged);
+            this.radioVNCAuth.CheckedChanged += new System.EventHandler(this.RadioAuthType_CheckedChanged);
             // 
             // radioSystemAuth
             // 
@@ -304,7 +304,7 @@
             this.radioSystemAuth.TabIndex = 2;
             this.radioSystemAuth.Text = "Windows Password (Professional and Enterprise only)";
             this.radioSystemAuth.UseVisualStyleBackColor = true;
-            this.radioSystemAuth.CheckedChanged += new System.EventHandler(this.radioAuthType_CheckedChanged);
+            this.radioSystemAuth.CheckedChanged += new System.EventHandler(this.RadioAuthType_CheckedChanged);
             // 
             // radioSingleSignOn
             // 
@@ -316,7 +316,7 @@
             this.radioSingleSignOn.TabIndex = 3;
             this.radioSingleSignOn.Text = "Single Sign On (Enterprise only, requires computer to be joined to a Domain)";
             this.radioSingleSignOn.UseVisualStyleBackColor = true;
-            this.radioSingleSignOn.CheckedChanged += new System.EventHandler(this.radioAuthType_CheckedChanged);
+            this.radioSingleSignOn.CheckedChanged += new System.EventHandler(this.RadioAuthType_CheckedChanged);
             // 
             // lblAuthTitle
             // 
@@ -568,7 +568,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // listViewUsersGroups
             // 
@@ -587,8 +587,8 @@
             this.listViewUsersGroups.TabIndex = 1;
             this.listViewUsersGroups.UseCompatibleStateImageBehavior = false;
             this.listViewUsersGroups.View = System.Windows.Forms.View.Details;
-            this.listViewUsersGroups.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewUsersGroups_ColumnWidthChanging);
-            this.listViewUsersGroups.SelectedIndexChanged += new System.EventHandler(this.listViewUsersGroups_SelectedIndexChanged);
+            this.listViewUsersGroups.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewUsersGroups_ColumnWidthChanging);
+            this.listViewUsersGroups.SelectedIndexChanged += new System.EventHandler(this.ListViewUsersGroups_SelectedIndexChanged);
             // 
             // colHeadType
             // 
@@ -629,7 +629,7 @@
             this.btnNext.TabIndex = 0;
             this.btnNext.Text = "Next >>";
             this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
             // btnBack
             // 
@@ -640,7 +640,7 @@
             this.btnBack.TabIndex = 1;
             this.btnBack.Text = "<< Back";
             this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
             // 
             // label2
             // 

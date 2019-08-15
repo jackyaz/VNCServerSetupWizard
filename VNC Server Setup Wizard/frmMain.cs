@@ -69,7 +69,7 @@ namespace VNC_Server_Setup_Wizard
             plantype = null;
         }
 
-        private void listBxMenu_DrawItem(object sender, DrawItemEventArgs e)
+        private void ListBxMenu_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Draw the background of the ListBox control for each item.
             e.DrawBackground();
@@ -87,7 +87,7 @@ namespace VNC_Server_Setup_Wizard
             e.DrawFocusRectangle();
         }
 
-        private void listBxMenu_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBxMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (listBxMenu.SelectedIndex)
             {
@@ -127,7 +127,7 @@ namespace VNC_Server_Setup_Wizard
         private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
         private void CheckboxState(bool enabledisable, CheckBox chkbox) { chkbox.Enabled = enabledisable; chkbox.Checked = enabledisable; }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
             {
@@ -192,7 +192,7 @@ namespace VNC_Server_Setup_Wizard
             }
         }
 
-        private void listViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewUsersGroups.SelectedItems.Count > 0)
             {
@@ -204,17 +204,17 @@ namespace VNC_Server_Setup_Wizard
             }
         }
 
-        private void listViewUsersGroups_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void ListViewUsersGroups_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             e.NewWidth = this.listViewUsersGroups.Columns[e.ColumnIndex].Width;
             e.Cancel = true;
         }
 
-        private void btnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
+        private void BtnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
 
-        private void btnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
+        private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
 
-        private void tabControlContent_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlContent_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlContent.SelectedIndex == 1)
             {
@@ -289,7 +289,7 @@ namespace VNC_Server_Setup_Wizard
 
         }
 
-        private void radioAuthType_CheckedChanged(object sender, EventArgs e)
+        private void RadioAuthType_CheckedChanged(object sender, EventArgs e)
         {
             if (radioVNCAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.VNCAuth; }
             if (radioSystemAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SystemAuth; }
