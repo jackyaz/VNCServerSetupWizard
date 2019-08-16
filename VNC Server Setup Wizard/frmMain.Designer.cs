@@ -39,8 +39,8 @@
             this.lblAuthSubtitle = new System.Windows.Forms.Label();
             this.lblDomainInfo = new System.Windows.Forms.Label();
             this.lblPasswordWarning = new System.Windows.Forms.Label();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.LinkLabelSSO = new System.Windows.Forms.LinkLabel();
+            this.LinkLabelSystemAuth = new System.Windows.Forms.LinkLabel();
             this.radioVNCAuth = new System.Windows.Forms.RadioButton();
             this.radioSystemAuth = new System.Windows.Forms.RadioButton();
             this.radioSingleSignOn = new System.Windows.Forms.RadioButton();
@@ -73,6 +73,7 @@
             this.colHeadName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageFinish = new System.Windows.Forms.TabPage();
             this.lblFinishTitle = new System.Windows.Forms.Label();
+            this.LinkLabelUpsell = new System.Windows.Forms.LinkLabel();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
@@ -148,6 +149,7 @@
             // 
             // splitContSubMenu.Panel2
             // 
+            this.splitContSubMenu.Panel2.Controls.Add(this.LinkLabelUpsell);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnNext);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnBack);
             this.splitContSubMenu.Size = new System.Drawing.Size(575, 390);
@@ -211,8 +213,8 @@
             this.tabPageAuth.Controls.Add(this.lblAuthSubtitle);
             this.tabPageAuth.Controls.Add(this.lblDomainInfo);
             this.tabPageAuth.Controls.Add(this.lblPasswordWarning);
-            this.tabPageAuth.Controls.Add(this.linkLabel2);
-            this.tabPageAuth.Controls.Add(this.linkLabel1);
+            this.tabPageAuth.Controls.Add(this.LinkLabelSSO);
+            this.tabPageAuth.Controls.Add(this.LinkLabelSystemAuth);
             this.tabPageAuth.Controls.Add(this.radioVNCAuth);
             this.tabPageAuth.Controls.Add(this.radioSystemAuth);
             this.tabPageAuth.Controls.Add(this.radioSingleSignOn);
@@ -239,9 +241,9 @@
             // 
             this.lblDomainInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDomainInfo.ForeColor = System.Drawing.Color.Black;
-            this.lblDomainInfo.Location = new System.Drawing.Point(6, 262);
+            this.lblDomainInfo.Location = new System.Drawing.Point(6, 225);
             this.lblDomainInfo.Name = "lblDomainInfo";
-            this.lblDomainInfo.Size = new System.Drawing.Size(549, 48);
+            this.lblDomainInfo.Size = new System.Drawing.Size(549, 30);
             this.lblDomainInfo.TabIndex = 7;
             this.lblDomainInfo.Text = "INFORMATION: This computer is not joined to a domain.";
             this.lblDomainInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -251,41 +253,44 @@
             // 
             this.lblPasswordWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPasswordWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblPasswordWarning.Location = new System.Drawing.Point(6, 188);
+            this.lblPasswordWarning.Location = new System.Drawing.Point(6, 151);
             this.lblPasswordWarning.Name = "lblPasswordWarning";
             this.lblPasswordWarning.Size = new System.Drawing.Size(479, 48);
             this.lblPasswordWarning.TabIndex = 6;
             this.lblPasswordWarning.Text = "WARNING: There is no password defined for your Windows user. You will need to set" +
-    " a password to use Windows password!";
+    " a password to use Windows Password!";
             this.lblPasswordWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblPasswordWarning.Visible = false;
             // 
-            // linkLabel2
+            // LinkLabelSSO
             // 
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(491, 243);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(55, 13);
-            this.linkLabel2.TabIndex = 5;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "linkLabel2";
+            this.LinkLabelSSO.Location = new System.Drawing.Point(403, 202);
+            this.LinkLabelSSO.Name = "LinkLabelSSO";
+            this.LinkLabelSSO.Size = new System.Drawing.Size(118, 20);
+            this.LinkLabelSSO.TabIndex = 5;
+            this.LinkLabelSSO.TabStop = true;
+            this.LinkLabelSSO.Text = "Learn more about SSO";
+            this.LinkLabelSSO.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LinkLabelSSO.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSSO_LinkClicked);
             // 
-            // linkLabel1
+            // LinkLabelSystemAuth
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(363, 169);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
-            this.linkLabel1.TabIndex = 4;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "linkLabel1";
+            this.LinkLabelSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LinkLabelSystemAuth.Location = new System.Drawing.Point(363, 129);
+            this.LinkLabelSystemAuth.Name = "LinkLabelSystemAuth";
+            this.LinkLabelSystemAuth.Size = new System.Drawing.Size(189, 18);
+            this.LinkLabelSystemAuth.TabIndex = 4;
+            this.LinkLabelSystemAuth.TabStop = true;
+            this.LinkLabelSystemAuth.Text = "Learn more about Windows Password";
+            this.LinkLabelSystemAuth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LinkLabelSystemAuth.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSystemAuth_LinkClicked);
             // 
             // radioVNCAuth
             // 
             this.radioVNCAuth.AutoSize = true;
             this.radioVNCAuth.Checked = true;
             this.radioVNCAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioVNCAuth.Location = new System.Drawing.Point(9, 91);
+            this.radioVNCAuth.Location = new System.Drawing.Point(9, 54);
             this.radioVNCAuth.Name = "radioVNCAuth";
             this.radioVNCAuth.Size = new System.Drawing.Size(117, 20);
             this.radioVNCAuth.TabIndex = 1;
@@ -298,7 +303,7 @@
             // 
             this.radioSystemAuth.AutoSize = true;
             this.radioSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSystemAuth.Location = new System.Drawing.Point(9, 165);
+            this.radioSystemAuth.Location = new System.Drawing.Point(9, 128);
             this.radioSystemAuth.Name = "radioSystemAuth";
             this.radioSystemAuth.Size = new System.Drawing.Size(348, 20);
             this.radioSystemAuth.TabIndex = 2;
@@ -310,11 +315,11 @@
             // 
             this.radioSingleSignOn.AutoSize = true;
             this.radioSingleSignOn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSingleSignOn.Location = new System.Drawing.Point(9, 239);
+            this.radioSingleSignOn.Location = new System.Drawing.Point(9, 202);
             this.radioSingleSignOn.Name = "radioSingleSignOn";
-            this.radioSingleSignOn.Size = new System.Drawing.Size(476, 20);
+            this.radioSingleSignOn.Size = new System.Drawing.Size(388, 20);
             this.radioSingleSignOn.TabIndex = 3;
-            this.radioSingleSignOn.Text = "Single Sign On (Enterprise only, requires computer to be joined to a Domain)";
+            this.radioSingleSignOn.Text = "Single Sign On (Enterprise only and domain-joined computer)";
             this.radioSingleSignOn.UseVisualStyleBackColor = true;
             this.radioSingleSignOn.CheckedChanged += new System.EventHandler(this.RadioAuthType_CheckedChanged);
             // 
@@ -353,6 +358,7 @@
             this.radio128.TabStop = true;
             this.radio128.Text = "128-bit AES";
             this.radio128.UseVisualStyleBackColor = true;
+            this.radio128.CheckedChanged += new System.EventHandler(this.RadioEncryptionType_CheckedChanged);
             // 
             // radio256
             // 
@@ -364,6 +370,7 @@
             this.radio256.TabIndex = 11;
             this.radio256.Text = "256-bit AES (Enterprise only)";
             this.radio256.UseVisualStyleBackColor = true;
+            this.radio256.CheckedChanged += new System.EventHandler(this.RadioEncryptionType_CheckedChanged);
             // 
             // lblEncryptionSubtitle
             // 
@@ -647,6 +654,19 @@
             this.lblFinishTitle.TabIndex = 0;
             this.lblFinishTitle.Text = "Finish";
             // 
+            // LinkLabelUpsell
+            // 
+            this.LinkLabelUpsell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LinkLabelUpsell.Location = new System.Drawing.Point(110, 15);
+            this.LinkLabelUpsell.Name = "LinkLabelUpsell";
+            this.LinkLabelUpsell.Size = new System.Drawing.Size(347, 32);
+            this.LinkLabelUpsell.TabIndex = 2;
+            this.LinkLabelUpsell.TabStop = true;
+            this.LinkLabelUpsell.Text = "Click here to learn more about the benefits of a paid subscription to VNC Connect" +
+    "";
+            this.LinkLabelUpsell.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LinkLabelUpsell.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelUpsell_LinkClicked);
+            // 
             // btnNext
             // 
             this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -732,8 +752,8 @@
         private System.Windows.Forms.RadioButton radioSystemAuth;
         private System.Windows.Forms.RadioButton radioVNCAuth;
         private System.Windows.Forms.RadioButton radioSingleSignOn;
-        private System.Windows.Forms.LinkLabel linkLabel2;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel LinkLabelSSO;
+        private System.Windows.Forms.LinkLabel LinkLabelSystemAuth;
         private System.Windows.Forms.Label lblPasswordWarning;
         private System.Windows.Forms.Label lblDomainInfo;
         private System.Windows.Forms.Label lblWelcomeSubtitle;
@@ -756,6 +776,7 @@
         private System.Windows.Forms.Panel pnlFeatureJoin;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label pnlFeatureInfo;
+        private System.Windows.Forms.LinkLabel LinkLabelUpsell;
     }
 }
 

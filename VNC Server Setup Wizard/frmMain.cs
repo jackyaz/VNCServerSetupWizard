@@ -15,8 +15,10 @@ namespace VNC_Server_Setup_Wizard
 {
     public partial class frmMain : Form
     {
-        bool domainmember = WindowsLogon.DomainMember;
-        VNC_Configuration vncconfig = new VNC_Configuration();
+        private bool domainmember = WindowsLogon.DomainMember;
+        private VNC_Configuration vncconfig = new VNC_Configuration();
+        private bool passwordenabled = WindowsLogon.PasswordEnabled;
+
         public frmMain()
         {
             InitializeComponent();
@@ -221,8 +223,6 @@ namespace VNC_Server_Setup_Wizard
         {
             if (tabControlContent.SelectedIndex == 1)
             {
-                bool passwordenabled = WindowsLogon.PasswordEnabled;
-
                 switch (vncconfig.Plan)
                 {
                     case VNC_Configuration.PlanType.Home:
@@ -274,7 +274,7 @@ namespace VNC_Server_Setup_Wizard
                         pnlFeatureInfo.Visible = true;
                         foreach (Control control in pnlFeaturesPaid.Controls)
                         {
-                            if(control.GetType() == typeof(CheckBox))
+                            if (control.GetType() == typeof(CheckBox))
                             {
                                 ((CheckBox)control).Checked = false;
                                 ((CheckBox)control).Enabled = false;
@@ -294,15 +294,51 @@ namespace VNC_Server_Setup_Wizard
 
         private void RadioAuthType_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioVNCAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.VNCAuth; }
-            if (radioSystemAuth.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SystemAuth; }
-            if (radioSingleSignOn.Checked) { vncconfig.Auth = VNC_Configuration.Authentication.SingleSignOn_SystemAuth; }
+            if (radioVNCAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.VNCAuth; lblPasswordWarning.Visible = false; }
+            if (radioSystemAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
+            if (radioSingleSignOn.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn_SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
+        }
+
+        private void RadioEncryptionType_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio128.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES128; }
+            if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES256; }
         }
 
         private void ChkFeatures_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox chk = (CheckBox)sender;
             VNC_Feature feature = vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", ""));
+        }
+
+        private void LinkLabelSystemAuth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                LinkLabelSystemAuth.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250097-Setting-up-System-Authentication");
+            }
+            catch { MessageBox.Show("Unable to open link."); }
+        }
+
+        private void LinkLabelSSO_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                LinkLabelSSO.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250257-Setting-up-Single-Sign-on-Authentication-SSO-");
+            }
+            catch { MessageBox.Show("Unable to open link."); }
+        }
+
+        private void LinkLabelUpsell_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                LinkLabelUpsell.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://www.realvnc.com/en/connect/pricing/");
+            }
+            catch { MessageBox.Show("Unable to open link."); }
         }
     }
 }
