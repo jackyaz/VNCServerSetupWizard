@@ -15,19 +15,28 @@ namespace VNC_Server_Setup_Wizard
 {
     public partial class frmMain : Form
     {
+        #region Variable declaration
         private bool domainmember = WindowsLogon.DomainMember;
         private VNC_Configuration vncconfig = new VNC_Configuration();
         private bool passwordenabled = WindowsLogon.PasswordEnabled;
+        #endregion
 
+        #region Form Constructor
         public frmMain()
         {
             InitializeComponent();
             listBxMenu.SelectedIndex = 0;
             listViewUsersGroups.Columns[1].Width = -2;
-            string cloudcreds = "";
+            SetConfigFromPlan(GetPlanType());
+        }
+        #endregion
+
+        private string GetPlanType()
+        {
             string plantype = "";
             if (File.Exists(vncconfig.credentialfile))
             {
+                string cloudcreds = "";
                 cloudcreds = File.ReadAllText(vncconfig.credentialfile);
                 plantype = cloudcreds.Substring(cloudcreds.LastIndexOf("cloud/plan") + 10, cloudcreds.IndexOf("cloud/principal") - (cloudcreds.LastIndexOf("cloud/plan") + 10));
                 plantype = Regex.Replace(new string(plantype.Where(c => !char.IsControl(c)).ToArray()), @"[^\u0000-\u007F]", string.Empty);
@@ -37,7 +46,11 @@ namespace VNC_Server_Setup_Wizard
             {
                 plantype = "Enterprise";
             }
+            return plantype;
+        }
 
+        private void SetConfigFromPlan(string plantype)
+        {
             switch (plantype)
             {
                 case "Home":
@@ -52,6 +65,7 @@ namespace VNC_Server_Setup_Wizard
                         }
                     }
                     VNC_Feature.EnableFreeFeatures(vncconfig);
+                    linkLabelUpsell.Visible = true;
                     break;
                 case "Professional":
                     vncconfig.Plan = VNC_Configuration.PlanType.Professional;
@@ -67,11 +81,9 @@ namespace VNC_Server_Setup_Wizard
                     break;
                 default:
                     MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    plantype = null;
                     Environment.Exit(0);
                     break;
             }
-            plantype = null;
         }
 
         private void ListBxMenu_DrawItem(object sender, DrawItemEventArgs e)
@@ -197,6 +209,15 @@ namespace VNC_Server_Setup_Wizard
             }
         }
 
+        private void BtnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
+
+        private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
+
+        private void BtnApply_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void ListViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewUsersGroups.SelectedItems.Count > 0)
@@ -214,10 +235,6 @@ namespace VNC_Server_Setup_Wizard
             e.NewWidth = this.listViewUsersGroups.Columns[e.ColumnIndex].Width;
             e.Cancel = true;
         }
-
-        private void BtnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
-
-        private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
 
         private void TabControlContent_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -295,27 +312,27 @@ namespace VNC_Server_Setup_Wizard
         private void RadioAuthType_CheckedChanged(object sender, EventArgs e)
         {
             if (radioVNCAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.VNCAuth; lblPasswordWarning.Visible = false; }
-            if (radioSystemAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
-            if (radioSingleSignOn.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn_SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
+            else if (radioSystemAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
+            else if (radioSingleSignOn.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn_SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
         }
 
         private void RadioEncryptionType_CheckedChanged(object sender, EventArgs e)
         {
             if (radio128.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES128; }
-            if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES256; }
+            else if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES256; }
         }
 
         private void ChkFeatures_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox chk = (CheckBox)sender;
-            VNC_Feature feature = vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", ""));
+            vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", "")).Enabled = chk.Checked;
         }
 
         private void LinkLabelSystemAuth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                LinkLabelSystemAuth.LinkVisited = true;
+                linkLabelSystemAuth.LinkVisited = true;
                 System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250097-Setting-up-System-Authentication");
             }
             catch { MessageBox.Show("Unable to open link."); }
@@ -325,7 +342,7 @@ namespace VNC_Server_Setup_Wizard
         {
             try
             {
-                LinkLabelSSO.LinkVisited = true;
+                linkLabelSSO.LinkVisited = true;
                 System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250257-Setting-up-Single-Sign-on-Authentication-SSO-");
             }
             catch { MessageBox.Show("Unable to open link."); }
@@ -335,7 +352,7 @@ namespace VNC_Server_Setup_Wizard
         {
             try
             {
-                LinkLabelUpsell.LinkVisited = true;
+                linkLabelUpsell.LinkVisited = true;
                 System.Diagnostics.Process.Start("https://www.realvnc.com/en/connect/pricing/");
             }
             catch { MessageBox.Show("Unable to open link."); }

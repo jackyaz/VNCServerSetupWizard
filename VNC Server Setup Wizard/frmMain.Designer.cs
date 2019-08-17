@@ -39,8 +39,8 @@
             this.lblAuthSubtitle = new System.Windows.Forms.Label();
             this.lblDomainInfo = new System.Windows.Forms.Label();
             this.lblPasswordWarning = new System.Windows.Forms.Label();
-            this.LinkLabelSSO = new System.Windows.Forms.LinkLabel();
-            this.LinkLabelSystemAuth = new System.Windows.Forms.LinkLabel();
+            this.linkLabelSSO = new System.Windows.Forms.LinkLabel();
+            this.linkLabelSystemAuth = new System.Windows.Forms.LinkLabel();
             this.radioVNCAuth = new System.Windows.Forms.RadioButton();
             this.radioSystemAuth = new System.Windows.Forms.RadioButton();
             this.radioSingleSignOn = new System.Windows.Forms.RadioButton();
@@ -52,7 +52,6 @@
             this.lblEncryptionTitle = new System.Windows.Forms.Label();
             this.tabPageFeatures = new System.Windows.Forms.TabPage();
             this.pnlFeatureInfo = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.pnlFeatureJoin = new System.Windows.Forms.Panel();
             this.chkCutText = new System.Windows.Forms.CheckBox();
             this.chkAcceptPointerEvents = new System.Windows.Forms.CheckBox();
@@ -68,14 +67,16 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.tabPageFinish = new System.Windows.Forms.TabPage();
+            this.lblFinishTitle = new System.Windows.Forms.Label();
+            this.linkLabelUpsell = new System.Windows.Forms.LinkLabel();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnBack = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnApply = new System.Windows.Forms.Button();
             this.listViewUsersGroups = new VNC_Server_Setup_Wizard.Better_ListView();
             this.colHeadType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeadName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPageFinish = new System.Windows.Forms.TabPage();
-            this.lblFinishTitle = new System.Windows.Forms.Label();
-            this.LinkLabelUpsell = new System.Windows.Forms.LinkLabel();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -149,7 +150,9 @@
             // 
             // splitContSubMenu.Panel2
             // 
-            this.splitContSubMenu.Panel2.Controls.Add(this.LinkLabelUpsell);
+            this.splitContSubMenu.Panel2.Controls.Add(this.btnApply);
+            this.splitContSubMenu.Panel2.Controls.Add(this.panel1);
+            this.splitContSubMenu.Panel2.Controls.Add(this.linkLabelUpsell);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnNext);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnBack);
             this.splitContSubMenu.Size = new System.Drawing.Size(575, 390);
@@ -213,8 +216,8 @@
             this.tabPageAuth.Controls.Add(this.lblAuthSubtitle);
             this.tabPageAuth.Controls.Add(this.lblDomainInfo);
             this.tabPageAuth.Controls.Add(this.lblPasswordWarning);
-            this.tabPageAuth.Controls.Add(this.LinkLabelSSO);
-            this.tabPageAuth.Controls.Add(this.LinkLabelSystemAuth);
+            this.tabPageAuth.Controls.Add(this.linkLabelSSO);
+            this.tabPageAuth.Controls.Add(this.linkLabelSystemAuth);
             this.tabPageAuth.Controls.Add(this.radioVNCAuth);
             this.tabPageAuth.Controls.Add(this.radioSystemAuth);
             this.tabPageAuth.Controls.Add(this.radioSingleSignOn);
@@ -262,28 +265,28 @@
             this.lblPasswordWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblPasswordWarning.Visible = false;
             // 
-            // LinkLabelSSO
+            // linkLabelSSO
             // 
-            this.LinkLabelSSO.Location = new System.Drawing.Point(403, 202);
-            this.LinkLabelSSO.Name = "LinkLabelSSO";
-            this.LinkLabelSSO.Size = new System.Drawing.Size(118, 20);
-            this.LinkLabelSSO.TabIndex = 5;
-            this.LinkLabelSSO.TabStop = true;
-            this.LinkLabelSSO.Text = "Learn more about SSO";
-            this.LinkLabelSSO.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.LinkLabelSSO.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSSO_LinkClicked);
+            this.linkLabelSSO.Location = new System.Drawing.Point(403, 202);
+            this.linkLabelSSO.Name = "linkLabelSSO";
+            this.linkLabelSSO.Size = new System.Drawing.Size(118, 20);
+            this.linkLabelSSO.TabIndex = 5;
+            this.linkLabelSSO.TabStop = true;
+            this.linkLabelSSO.Text = "Learn more about SSO";
+            this.linkLabelSSO.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.linkLabelSSO.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSSO_LinkClicked);
             // 
-            // LinkLabelSystemAuth
+            // linkLabelSystemAuth
             // 
-            this.LinkLabelSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LinkLabelSystemAuth.Location = new System.Drawing.Point(363, 129);
-            this.LinkLabelSystemAuth.Name = "LinkLabelSystemAuth";
-            this.LinkLabelSystemAuth.Size = new System.Drawing.Size(189, 18);
-            this.LinkLabelSystemAuth.TabIndex = 4;
-            this.LinkLabelSystemAuth.TabStop = true;
-            this.LinkLabelSystemAuth.Text = "Learn more about Windows Password";
-            this.LinkLabelSystemAuth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.LinkLabelSystemAuth.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSystemAuth_LinkClicked);
+            this.linkLabelSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelSystemAuth.Location = new System.Drawing.Point(363, 129);
+            this.linkLabelSystemAuth.Name = "linkLabelSystemAuth";
+            this.linkLabelSystemAuth.Size = new System.Drawing.Size(189, 18);
+            this.linkLabelSystemAuth.TabIndex = 4;
+            this.linkLabelSystemAuth.TabStop = true;
+            this.linkLabelSystemAuth.Text = "Learn more about Windows Password";
+            this.linkLabelSystemAuth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.linkLabelSystemAuth.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelSystemAuth_LinkClicked);
             // 
             // radioVNCAuth
             // 
@@ -396,7 +399,6 @@
             // tabPageFeatures
             // 
             this.tabPageFeatures.Controls.Add(this.pnlFeatureInfo);
-            this.tabPageFeatures.Controls.Add(this.label2);
             this.tabPageFeatures.Controls.Add(this.pnlFeatureJoin);
             this.tabPageFeatures.Controls.Add(this.chkCutText);
             this.tabPageFeatures.Controls.Add(this.chkAcceptPointerEvents);
@@ -415,21 +417,13 @@
             // 
             this.pnlFeatureInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlFeatureInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pnlFeatureInfo.Location = new System.Drawing.Point(329, 181);
+            this.pnlFeatureInfo.Location = new System.Drawing.Point(325, 181);
             this.pnlFeatureInfo.Name = "pnlFeatureInfo";
             this.pnlFeatureInfo.Size = new System.Drawing.Size(119, 118);
             this.pnlFeatureInfo.TabIndex = 20;
             this.pnlFeatureInfo.Text = "These features require a Professional or Enterprise subscription.";
             this.pnlFeatureInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.pnlFeatureInfo.Visible = false;
-            // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(335, 229);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 23);
-            this.label2.TabIndex = 19;
             // 
             // pnlFeatureJoin
             // 
@@ -588,7 +582,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 4);
+            this.label1.Location = new System.Drawing.Point(43, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 3;
@@ -603,6 +597,83 @@
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // tabPageFinish
+            // 
+            this.tabPageFinish.Controls.Add(this.lblFinishTitle);
+            this.tabPageFinish.Location = new System.Drawing.Point(4, 5);
+            this.tabPageFinish.Name = "tabPageFinish";
+            this.tabPageFinish.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageFinish.Size = new System.Drawing.Size(567, 316);
+            this.tabPageFinish.TabIndex = 4;
+            this.tabPageFinish.UseVisualStyleBackColor = true;
+            // 
+            // lblFinishTitle
+            // 
+            this.lblFinishTitle.AutoSize = true;
+            this.lblFinishTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFinishTitle.Location = new System.Drawing.Point(250, 4);
+            this.lblFinishTitle.Name = "lblFinishTitle";
+            this.lblFinishTitle.Size = new System.Drawing.Size(67, 24);
+            this.lblFinishTitle.TabIndex = 0;
+            this.lblFinishTitle.Text = "Finish";
+            // 
+            // linkLabelUpsell
+            // 
+            this.linkLabelUpsell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelUpsell.Location = new System.Drawing.Point(110, 15);
+            this.linkLabelUpsell.Name = "linkLabelUpsell";
+            this.linkLabelUpsell.Size = new System.Drawing.Size(347, 32);
+            this.linkLabelUpsell.TabIndex = 2;
+            this.linkLabelUpsell.TabStop = true;
+            this.linkLabelUpsell.Text = "Click here to learn more about the benefits of a paid subscription to VNC Connect" +
+    "";
+            this.linkLabelUpsell.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.linkLabelUpsell.Visible = false;
+            this.linkLabelUpsell.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelUpsell_LinkClicked);
+            // 
+            // btnNext
+            // 
+            this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.Location = new System.Drawing.Point(463, 10);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(100, 40);
+            this.btnNext.TabIndex = 0;
+            this.btnNext.Text = "Next >>";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
+            // 
+            // btnBack
+            // 
+            this.btnBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBack.Location = new System.Drawing.Point(4, 10);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(100, 40);
+            this.btnBack.TabIndex = 1;
+            this.btnBack.Text = "<< Back";
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(575, 2);
+            this.panel1.TabIndex = 3;
+            // 
+            // btnApply
+            // 
+            this.btnApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnApply.Location = new System.Drawing.Point(463, 10);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(100, 40);
+            this.btnApply.TabIndex = 4;
+            this.btnApply.Text = "Apply";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.BtnApply_Click);
             // 
             // listViewUsersGroups
             // 
@@ -633,61 +704,6 @@
             // 
             this.colHeadName.Text = "Name";
             this.colHeadName.Width = 496;
-            // 
-            // tabPageFinish
-            // 
-            this.tabPageFinish.Controls.Add(this.lblFinishTitle);
-            this.tabPageFinish.Location = new System.Drawing.Point(4, 5);
-            this.tabPageFinish.Name = "tabPageFinish";
-            this.tabPageFinish.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFinish.Size = new System.Drawing.Size(567, 316);
-            this.tabPageFinish.TabIndex = 4;
-            this.tabPageFinish.UseVisualStyleBackColor = true;
-            // 
-            // lblFinishTitle
-            // 
-            this.lblFinishTitle.AutoSize = true;
-            this.lblFinishTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFinishTitle.Location = new System.Drawing.Point(250, 4);
-            this.lblFinishTitle.Name = "lblFinishTitle";
-            this.lblFinishTitle.Size = new System.Drawing.Size(67, 24);
-            this.lblFinishTitle.TabIndex = 0;
-            this.lblFinishTitle.Text = "Finish";
-            // 
-            // LinkLabelUpsell
-            // 
-            this.LinkLabelUpsell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LinkLabelUpsell.Location = new System.Drawing.Point(110, 15);
-            this.LinkLabelUpsell.Name = "LinkLabelUpsell";
-            this.LinkLabelUpsell.Size = new System.Drawing.Size(347, 32);
-            this.LinkLabelUpsell.TabIndex = 2;
-            this.LinkLabelUpsell.TabStop = true;
-            this.LinkLabelUpsell.Text = "Click here to learn more about the benefits of a paid subscription to VNC Connect" +
-    "";
-            this.LinkLabelUpsell.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.LinkLabelUpsell.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelUpsell_LinkClicked);
-            // 
-            // btnNext
-            // 
-            this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.Location = new System.Drawing.Point(463, 10);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(100, 40);
-            this.btnNext.TabIndex = 0;
-            this.btnNext.Text = "Next >>";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
-            // 
-            // btnBack
-            // 
-            this.btnBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBack.Location = new System.Drawing.Point(4, 10);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(100, 40);
-            this.btnBack.TabIndex = 1;
-            this.btnBack.Text = "<< Back";
-            this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
             // 
             // frmMain
             // 
@@ -752,8 +768,8 @@
         private System.Windows.Forms.RadioButton radioSystemAuth;
         private System.Windows.Forms.RadioButton radioVNCAuth;
         private System.Windows.Forms.RadioButton radioSingleSignOn;
-        private System.Windows.Forms.LinkLabel LinkLabelSSO;
-        private System.Windows.Forms.LinkLabel LinkLabelSystemAuth;
+        private System.Windows.Forms.LinkLabel linkLabelSSO;
+        private System.Windows.Forms.LinkLabel linkLabelSystemAuth;
         private System.Windows.Forms.Label lblPasswordWarning;
         private System.Windows.Forms.Label lblDomainInfo;
         private System.Windows.Forms.Label lblWelcomeSubtitle;
@@ -774,9 +790,10 @@
         private System.Windows.Forms.CheckBox chkAcceptKeyEvents;
         private System.Windows.Forms.Panel pnlFeaturesPaid;
         private System.Windows.Forms.Panel pnlFeatureJoin;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label pnlFeatureInfo;
-        private System.Windows.Forms.LinkLabel LinkLabelUpsell;
+        private System.Windows.Forms.LinkLabel linkLabelUpsell;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btnApply;
     }
 }
 
