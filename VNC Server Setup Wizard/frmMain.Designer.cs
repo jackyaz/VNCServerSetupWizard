@@ -36,6 +36,12 @@
             this.lblWelcomeSubtitle = new System.Windows.Forms.Label();
             this.lblWelcomeTitle = new System.Windows.Forms.Label();
             this.tabPageAuth = new System.Windows.Forms.TabPage();
+            this.btnConfirmPassword = new System.Windows.Forms.Button();
+            this.lblVNCPasswordMatch = new System.Windows.Forms.Label();
+            this.lblPassword2 = new System.Windows.Forms.Label();
+            this.lblPassword1 = new System.Windows.Forms.Label();
+            this.txtBoxPassword2 = new System.Windows.Forms.TextBox();
+            this.txtBoxPassword1 = new System.Windows.Forms.TextBox();
             this.lblAuthSubtitle = new System.Windows.Forms.Label();
             this.lblDomainInfo = new System.Windows.Forms.Label();
             this.lblPasswordWarning = new System.Windows.Forms.Label();
@@ -69,10 +75,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabPageFinish = new System.Windows.Forms.TabPage();
             this.lblFinishTitle = new System.Windows.Forms.Label();
+            this.pnlSplitLine = new System.Windows.Forms.Panel();
             this.linkLabelUpsell = new System.Windows.Forms.LinkLabel();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.btnApply = new System.Windows.Forms.Button();
             this.listViewUsersGroups = new VNC_Server_Setup_Wizard.Better_ListView();
             this.colHeadType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -135,6 +141,7 @@
             this.splitContMenu.Size = new System.Drawing.Size(764, 390);
             this.splitContMenu.SplitterDistance = 185;
             this.splitContMenu.TabIndex = 1;
+            this.splitContMenu.TabStop = false;
             // 
             // splitContSubMenu
             // 
@@ -150,14 +157,15 @@
             // 
             // splitContSubMenu.Panel2
             // 
-            this.splitContSubMenu.Panel2.Controls.Add(this.btnApply);
-            this.splitContSubMenu.Panel2.Controls.Add(this.panel1);
+            this.splitContSubMenu.Panel2.Controls.Add(this.pnlSplitLine);
             this.splitContSubMenu.Panel2.Controls.Add(this.linkLabelUpsell);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnNext);
             this.splitContSubMenu.Panel2.Controls.Add(this.btnBack);
+            this.splitContSubMenu.Panel2.Controls.Add(this.btnApply);
             this.splitContSubMenu.Size = new System.Drawing.Size(575, 390);
             this.splitContSubMenu.SplitterDistance = 325;
             this.splitContSubMenu.TabIndex = 0;
+            this.splitContSubMenu.TabStop = false;
             // 
             // tabControlContent
             // 
@@ -177,7 +185,6 @@
             this.tabControlContent.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControlContent.TabIndex = 8;
             this.tabControlContent.TabStop = false;
-            this.tabControlContent.SelectedIndexChanged += new System.EventHandler(this.TabControlContent_SelectedIndexChanged);
             // 
             // tabPageWelcome
             // 
@@ -213,6 +220,12 @@
             // 
             // tabPageAuth
             // 
+            this.tabPageAuth.Controls.Add(this.btnConfirmPassword);
+            this.tabPageAuth.Controls.Add(this.lblVNCPasswordMatch);
+            this.tabPageAuth.Controls.Add(this.lblPassword2);
+            this.tabPageAuth.Controls.Add(this.lblPassword1);
+            this.tabPageAuth.Controls.Add(this.txtBoxPassword2);
+            this.tabPageAuth.Controls.Add(this.txtBoxPassword1);
             this.tabPageAuth.Controls.Add(this.lblAuthSubtitle);
             this.tabPageAuth.Controls.Add(this.lblDomainInfo);
             this.tabPageAuth.Controls.Add(this.lblPasswordWarning);
@@ -229,6 +242,75 @@
             this.tabPageAuth.TabIndex = 1;
             this.tabPageAuth.UseVisualStyleBackColor = true;
             // 
+            // btnConfirmPassword
+            // 
+            this.btnConfirmPassword.Location = new System.Drawing.Point(395, 110);
+            this.btnConfirmPassword.Name = "btnConfirmPassword";
+            this.btnConfirmPassword.Size = new System.Drawing.Size(106, 23);
+            this.btnConfirmPassword.TabIndex = 14;
+            this.btnConfirmPassword.Text = "Confirm password";
+            this.btnConfirmPassword.UseVisualStyleBackColor = true;
+            this.btnConfirmPassword.Visible = false;
+            this.btnConfirmPassword.Click += new System.EventHandler(this.btnConfirmPassword_Click);
+            // 
+            // lblVNCPasswordMatch
+            // 
+            this.lblVNCPasswordMatch.BackColor = System.Drawing.Color.Yellow;
+            this.lblVNCPasswordMatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVNCPasswordMatch.Location = new System.Drawing.Point(370, 76);
+            this.lblVNCPasswordMatch.Name = "lblVNCPasswordMatch";
+            this.lblVNCPasswordMatch.Size = new System.Drawing.Size(156, 22);
+            this.lblVNCPasswordMatch.TabIndex = 13;
+            this.lblVNCPasswordMatch.Text = "Passwords do not match!";
+            this.lblVNCPasswordMatch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblVNCPasswordMatch.Visible = false;
+            // 
+            // lblPassword2
+            // 
+            this.lblPassword2.AutoSize = true;
+            this.lblPassword2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPassword2.Location = new System.Drawing.Point(25, 113);
+            this.lblPassword2.Name = "lblPassword2";
+            this.lblPassword2.Size = new System.Drawing.Size(118, 16);
+            this.lblPassword2.TabIndex = 12;
+            this.lblPassword2.Text = "Confirm password:";
+            this.lblPassword2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblPassword2.Visible = false;
+            // 
+            // lblPassword1
+            // 
+            this.lblPassword1.AutoSize = true;
+            this.lblPassword1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPassword1.Location = new System.Drawing.Point(25, 79);
+            this.lblPassword1.Name = "lblPassword1";
+            this.lblPassword1.Size = new System.Drawing.Size(104, 16);
+            this.lblPassword1.TabIndex = 11;
+            this.lblPassword1.Text = "Enter password:";
+            this.lblPassword1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblPassword1.Visible = false;
+            // 
+            // txtBoxPassword2
+            // 
+            this.txtBoxPassword2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPassword2.Location = new System.Drawing.Point(149, 110);
+            this.txtBoxPassword2.Name = "txtBoxPassword2";
+            this.txtBoxPassword2.Size = new System.Drawing.Size(175, 22);
+            this.txtBoxPassword2.TabIndex = 10;
+            this.txtBoxPassword2.UseSystemPasswordChar = true;
+            this.txtBoxPassword2.Visible = false;
+            this.txtBoxPassword2.TextChanged += new System.EventHandler(this.TxtBoxPassword_TextChanged);
+            // 
+            // txtBoxPassword1
+            // 
+            this.txtBoxPassword1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPassword1.Location = new System.Drawing.Point(149, 76);
+            this.txtBoxPassword1.Name = "txtBoxPassword1";
+            this.txtBoxPassword1.Size = new System.Drawing.Size(175, 22);
+            this.txtBoxPassword1.TabIndex = 9;
+            this.txtBoxPassword1.UseSystemPasswordChar = true;
+            this.txtBoxPassword1.Visible = false;
+            this.txtBoxPassword1.TextChanged += new System.EventHandler(this.TxtBoxPassword_TextChanged);
+            // 
             // lblAuthSubtitle
             // 
             this.lblAuthSubtitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -244,7 +326,7 @@
             // 
             this.lblDomainInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDomainInfo.ForeColor = System.Drawing.Color.Black;
-            this.lblDomainInfo.Location = new System.Drawing.Point(6, 225);
+            this.lblDomainInfo.Location = new System.Drawing.Point(6, 255);
             this.lblDomainInfo.Name = "lblDomainInfo";
             this.lblDomainInfo.Size = new System.Drawing.Size(549, 30);
             this.lblDomainInfo.TabIndex = 7;
@@ -256,7 +338,7 @@
             // 
             this.lblPasswordWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPasswordWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblPasswordWarning.Location = new System.Drawing.Point(6, 151);
+            this.lblPasswordWarning.Location = new System.Drawing.Point(6, 166);
             this.lblPasswordWarning.Name = "lblPasswordWarning";
             this.lblPasswordWarning.Size = new System.Drawing.Size(479, 48);
             this.lblPasswordWarning.TabIndex = 6;
@@ -267,10 +349,10 @@
             // 
             // linkLabelSSO
             // 
-            this.linkLabelSSO.Location = new System.Drawing.Point(403, 202);
+            this.linkLabelSSO.Location = new System.Drawing.Point(403, 232);
             this.linkLabelSSO.Name = "linkLabelSSO";
             this.linkLabelSSO.Size = new System.Drawing.Size(118, 20);
-            this.linkLabelSSO.TabIndex = 5;
+            this.linkLabelSSO.TabIndex = 8;
             this.linkLabelSSO.TabStop = true;
             this.linkLabelSSO.Text = "Learn more about SSO";
             this.linkLabelSSO.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -279,10 +361,10 @@
             // linkLabelSystemAuth
             // 
             this.linkLabelSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelSystemAuth.Location = new System.Drawing.Point(363, 129);
+            this.linkLabelSystemAuth.Location = new System.Drawing.Point(363, 144);
             this.linkLabelSystemAuth.Name = "linkLabelSystemAuth";
             this.linkLabelSystemAuth.Size = new System.Drawing.Size(189, 18);
-            this.linkLabelSystemAuth.TabIndex = 4;
+            this.linkLabelSystemAuth.TabIndex = 6;
             this.linkLabelSystemAuth.TabStop = true;
             this.linkLabelSystemAuth.Text = "Learn more about Windows Password";
             this.linkLabelSystemAuth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -296,7 +378,7 @@
             this.radioVNCAuth.Location = new System.Drawing.Point(9, 54);
             this.radioVNCAuth.Name = "radioVNCAuth";
             this.radioVNCAuth.Size = new System.Drawing.Size(117, 20);
-            this.radioVNCAuth.TabIndex = 1;
+            this.radioVNCAuth.TabIndex = 4;
             this.radioVNCAuth.TabStop = true;
             this.radioVNCAuth.Text = "VNC Password";
             this.radioVNCAuth.UseVisualStyleBackColor = true;
@@ -306,10 +388,11 @@
             // 
             this.radioSystemAuth.AutoSize = true;
             this.radioSystemAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSystemAuth.Location = new System.Drawing.Point(9, 128);
+            this.radioSystemAuth.Location = new System.Drawing.Point(9, 143);
             this.radioSystemAuth.Name = "radioSystemAuth";
             this.radioSystemAuth.Size = new System.Drawing.Size(348, 20);
-            this.radioSystemAuth.TabIndex = 2;
+            this.radioSystemAuth.TabIndex = 5;
+            this.radioSystemAuth.TabStop = true;
             this.radioSystemAuth.Text = "Windows Password (Professional and Enterprise only)";
             this.radioSystemAuth.UseVisualStyleBackColor = true;
             this.radioSystemAuth.CheckedChanged += new System.EventHandler(this.RadioAuthType_CheckedChanged);
@@ -318,10 +401,11 @@
             // 
             this.radioSingleSignOn.AutoSize = true;
             this.radioSingleSignOn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSingleSignOn.Location = new System.Drawing.Point(9, 202);
+            this.radioSingleSignOn.Location = new System.Drawing.Point(9, 232);
             this.radioSingleSignOn.Name = "radioSingleSignOn";
             this.radioSingleSignOn.Size = new System.Drawing.Size(388, 20);
-            this.radioSingleSignOn.TabIndex = 3;
+            this.radioSingleSignOn.TabIndex = 7;
+            this.radioSingleSignOn.TabStop = true;
             this.radioSingleSignOn.Text = "Single Sign On (Enterprise only and domain-joined computer)";
             this.radioSingleSignOn.UseVisualStyleBackColor = true;
             this.radioSingleSignOn.CheckedChanged += new System.EventHandler(this.RadioAuthType_CheckedChanged);
@@ -357,7 +441,7 @@
             this.radio128.Location = new System.Drawing.Point(9, 96);
             this.radio128.Name = "radio128";
             this.radio128.Size = new System.Drawing.Size(95, 20);
-            this.radio128.TabIndex = 10;
+            this.radio128.TabIndex = 4;
             this.radio128.TabStop = true;
             this.radio128.Text = "128-bit AES";
             this.radio128.UseVisualStyleBackColor = true;
@@ -370,7 +454,7 @@
             this.radio256.Location = new System.Drawing.Point(9, 170);
             this.radio256.Name = "radio256";
             this.radio256.Size = new System.Drawing.Size(195, 20);
-            this.radio256.TabIndex = 11;
+            this.radio256.TabIndex = 5;
             this.radio256.Text = "256-bit AES (Enterprise only)";
             this.radio256.UseVisualStyleBackColor = true;
             this.radio256.CheckedChanged += new System.EventHandler(this.RadioEncryptionType_CheckedChanged);
@@ -618,13 +702,23 @@
             this.lblFinishTitle.TabIndex = 0;
             this.lblFinishTitle.Text = "Finish";
             // 
+            // pnlSplitLine
+            // 
+            this.pnlSplitLine.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlSplitLine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSplitLine.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSplitLine.Location = new System.Drawing.Point(0, 0);
+            this.pnlSplitLine.Name = "pnlSplitLine";
+            this.pnlSplitLine.Size = new System.Drawing.Size(575, 2);
+            this.pnlSplitLine.TabIndex = 3;
+            // 
             // linkLabelUpsell
             // 
             this.linkLabelUpsell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelUpsell.Location = new System.Drawing.Point(110, 15);
             this.linkLabelUpsell.Name = "linkLabelUpsell";
             this.linkLabelUpsell.Size = new System.Drawing.Size(347, 32);
-            this.linkLabelUpsell.TabIndex = 2;
+            this.linkLabelUpsell.TabIndex = 3;
             this.linkLabelUpsell.TabStop = true;
             this.linkLabelUpsell.Text = "Click here to learn more about the benefits of a paid subscription to VNC Connect" +
     "";
@@ -654,25 +748,16 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
             // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(575, 2);
-            this.panel1.TabIndex = 3;
-            // 
             // btnApply
             // 
             this.btnApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnApply.Location = new System.Drawing.Point(463, 10);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(100, 40);
-            this.btnApply.TabIndex = 4;
+            this.btnApply.TabIndex = 2;
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Visible = false;
             this.btnApply.Click += new System.EventHandler(this.BtnApply_Click);
             // 
             // listViewUsersGroups
@@ -711,7 +796,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(764, 390);
             this.Controls.Add(this.splitContMenu);
-            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.Name = "frmMain";
@@ -792,8 +876,14 @@
         private System.Windows.Forms.Panel pnlFeatureJoin;
         private System.Windows.Forms.Label pnlFeatureInfo;
         private System.Windows.Forms.LinkLabel linkLabelUpsell;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlSplitLine;
         private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.TextBox txtBoxPassword1;
+        private System.Windows.Forms.Label lblPassword1;
+        private System.Windows.Forms.TextBox txtBoxPassword2;
+        private System.Windows.Forms.Label lblPassword2;
+        private System.Windows.Forms.Button btnConfirmPassword;
+        private System.Windows.Forms.Label lblVNCPasswordMatch;
     }
 }
 

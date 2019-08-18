@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.IO;
@@ -28,6 +29,11 @@ namespace VNC_Server_Setup_Wizard
             listBxMenu.SelectedIndex = 0;
             listViewUsersGroups.Columns[1].Width = -2;
             SetConfigFromPlan(GetPlanType());
+
+            for (int i = 0; i < listBxMenu.Items.Count; i++)
+            {
+                if (listBxMenu.Items[i].ToString() == "Users & Permissions") { listBxMenu.Items.RemoveAt(i); }
+            }
         }
         #endregion
 
@@ -56,7 +62,13 @@ namespace VNC_Server_Setup_Wizard
                 case "Home":
                     vncconfig.Plan = VNC_Configuration.PlanType.Home;
                     radioVNCAuth.Checked = true;
+                    radioVNCAuth.Enabled = true;
+                    radioSystemAuth.Enabled = false;
+                    radioSingleSignOn.Enabled = false;
+                    ToggleVNCPasswordFields(true);
+                    radio128.Enabled = true;
                     radio128.Checked = true;
+                    radio256.Enabled = false;
                     foreach (Control control in pnlFeaturesPaid.Controls)
                     {
                         if (control.GetType() == typeof(CheckBox))
@@ -65,24 +77,79 @@ namespace VNC_Server_Setup_Wizard
                         }
                     }
                     VNC_Feature.EnableFreeFeatures(vncconfig);
+                    pnlFeatureJoin.Visible = true;
+                    pnlFeatureInfo.Visible = true;
+                    foreach (Control control in pnlFeaturesPaid.Controls)
+                    {
+                        if (control.GetType() == typeof(CheckBox))
+                        {
+                            ((CheckBox)control).Checked = false;
+                            ((CheckBox)control).Enabled = false;
+                        }
+                    }
                     linkLabelUpsell.Visible = true;
                     break;
                 case "Professional":
                     vncconfig.Plan = VNC_Configuration.PlanType.Professional;
+                    radioVNCAuth.Enabled = true;
+                    radioSystemAuth.Enabled = passwordenabled;
                     radioSystemAuth.Checked = true;
+                    lblPasswordWarning.Visible = !passwordenabled;
+                    radioSingleSignOn.Enabled = false;
+                    ToggleVNCPasswordFields(false);
+                    radio128.Enabled = true;
                     radio128.Checked = true;
+                    radio256.Enabled = false;
                     VNC_Feature.EnableAllFeatures(vncconfig);
+                    pnlFeaturesPaid.BorderStyle = BorderStyle.None;
                     break;
                 case "Enterprise":
                     vncconfig.Plan = VNC_Configuration.PlanType.Enterprise;
+                    radioVNCAuth.Enabled = true;
+                    radioSystemAuth.Enabled = passwordenabled;
                     radioSystemAuth.Checked = true;
+                    lblPasswordWarning.Visible = !passwordenabled;
+                    if (domainmember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; lblDomainInfo.Visible = true; }
+                    ToggleVNCPasswordFields(false);
+                    radio128.Enabled = true;
+                    radio256.Enabled = true;
                     radio256.Checked = true;
                     VNC_Feature.EnableAllFeatures(vncconfig);
+                    pnlFeaturesPaid.BorderStyle = BorderStyle.None;
                     break;
                 default:
                     MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     Environment.Exit(0);
                     break;
+            }
+        }
+
+        private void ToggleVNCPasswordFields(bool showhide)
+        {
+            lblPassword1.Visible = showhide;
+            lblPassword2.Visible = showhide;
+            txtBoxPassword1.Visible = showhide;
+            txtBoxPassword2.Visible = showhide;
+
+            if (btnConfirmPassword.Enabled)
+            {
+                txtBoxPassword1.Text = "";
+                txtBoxPassword2.Text = "";
+            }
+
+            CheckVNCPassword();
+            btnConfirmPassword.Visible = showhide;
+        }
+
+        private void CheckVNCPassword()
+        {
+            if (txtBoxPassword1.Text != txtBoxPassword2.Text)
+            {
+                lblVNCPasswordMatch.Visible = true;
+            }
+            else if (txtBoxPassword1.Text == txtBoxPassword2.Text)
+            {
+                lblVNCPasswordMatch.Visible = false;
             }
         }
 
@@ -111,38 +178,147 @@ namespace VNC_Server_Setup_Wizard
                 case 0:
                     ButtonState(true, btnNext);
                     ButtonState(false, btnBack);
+                    ButtonState(false, btnApply);
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 1:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
+                    ButtonState(false, btnApply);
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 2:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
+                    ButtonState(false, btnApply);
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
                 case 3:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
+                    ButtonState(false, btnApply);
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
-                case 4:
+                /*case 4:
                     ButtonState(true, btnNext);
                     ButtonState(true, btnBack);
+                    ButtonState(false, btnApply);
                     tabControlContent.SelectTab(listBxMenu.SelectedIndex);
                     break;
-                case 5:
+                case 5:*/
+                case 4:
                     ButtonState(false, btnNext);
                     ButtonState(true, btnBack);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
+                    ButtonState(true, btnApply);
+                    tabControlContent.SelectTab(listBxMenu.SelectedIndex + 1);
                     break;
             }
         }
 
         private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
         private void CheckboxState(bool enabledisable, CheckBox chkbox) { chkbox.Enabled = enabledisable; chkbox.Checked = enabledisable; }
+
+        private void BtnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
+
+        private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
+
+        private void BtnApply_Click(object sender, EventArgs e) { }
+
+        private void LinkLabelUpsell_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                linkLabelUpsell.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://www.realvnc.com/en/connect/pricing/");
+            }
+            catch { MessageBox.Show("Unable to open link."); }
+        }
+
+        #region Authentication Tab events
+
+        private void RadioAuthType_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioVNCAuth.Checked)
+            {
+                vncconfig.Authentication = VNC_Configuration.AuthenticationType.VNCAuth;
+                lblPasswordWarning.Visible = false;
+                ToggleVNCPasswordFields(true);
+            }
+            else if (radioSystemAuth.Checked)
+            {
+                vncconfig.Authentication = VNC_Configuration.AuthenticationType.SystemAuth;
+                lblPasswordWarning.Visible = !passwordenabled;
+                ToggleVNCPasswordFields(false);
+            }
+            else if (radioSingleSignOn.Checked)
+            {
+                vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn_SystemAuth;
+                lblPasswordWarning.Visible = !passwordenabled;
+                ToggleVNCPasswordFields(false);
+            }
+        }
+
+        private void TxtBoxPassword_TextChanged(object sender, EventArgs e)
+        {
+            CheckVNCPassword();
+        }
+
+        private void btnConfirmPassword_Click(object sender, EventArgs e)
+        {
+            if (txtBoxPassword1.Text == txtBoxPassword2.Text)
+            {
+                vncconfig.EncryptedPassword = VNC_Password.GetEncryptedPassword(txtBoxPassword1.Text);
+                txtBoxPassword1.Text = "********";
+                txtBoxPassword2.Text = "********";
+                txtBoxPassword1.Enabled = false;
+                txtBoxPassword2.Enabled = false;
+                btnConfirmPassword.Enabled = false;
+            }
+        }
+
+        private void LinkLabelSystemAuth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                linkLabelSystemAuth.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250097-Setting-up-System-Authentication");
+            }
+            catch { MessageBox.Show("Unable to open link."); }
+        }
+
+        private void LinkLabelSSO_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                linkLabelSSO.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250257-Setting-up-Single-Sign-on-Authentication-SSO-");
+            }
+            catch { MessageBox.Show("Unable to open link."); }
+        }
+
+        #endregion
+
+        #region Encryption Tab events
+
+        private void RadioEncryptionType_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio128.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES128; }
+            else if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES256; }
+        }
+
+        #endregion
+
+        #region Feature Tab events
+
+        private void ChkFeatures_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chk = (CheckBox)sender;
+            vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", "")).Enabled = chk.Checked;
+        }
+
+        #endregion
+
+        #region Users & Permissions Tab events
 
         private void Button1_Click(object sender, EventArgs e)
         {
@@ -209,15 +385,6 @@ namespace VNC_Server_Setup_Wizard
             }
         }
 
-        private void BtnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
-
-        private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
-
-        private void BtnApply_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ListViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewUsersGroups.SelectedItems.Count > 0)
@@ -236,126 +403,6 @@ namespace VNC_Server_Setup_Wizard
             e.Cancel = true;
         }
 
-        private void TabControlContent_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControlContent.SelectedIndex == 1)
-            {
-                switch (vncconfig.Plan)
-                {
-                    case VNC_Configuration.PlanType.Home:
-                        radioVNCAuth.Enabled = true;
-                        radioSystemAuth.Enabled = false;
-                        radioSingleSignOn.Enabled = false;
-                        break;
-                    case VNC_Configuration.PlanType.Professional:
-                        radioVNCAuth.Enabled = true;
-                        radioSystemAuth.Enabled = passwordenabled;
-                        lblPasswordWarning.Visible = !passwordenabled;
-                        radioSingleSignOn.Enabled = false;
-                        break;
-                    case VNC_Configuration.PlanType.Enterprise:
-                        radioVNCAuth.Enabled = true;
-                        radioSystemAuth.Enabled = passwordenabled;
-                        lblPasswordWarning.Visible = !passwordenabled;
-                        if (domainmember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; lblDomainInfo.Visible = true; }
-                        break;
-                }
-            }
-
-            if (tabControlContent.SelectedIndex == 2)
-            {
-                switch (vncconfig.Plan)
-                {
-                    case VNC_Configuration.PlanType.Home:
-                        radio128.Enabled = true;
-                        radio256.Enabled = false;
-                        break;
-                    case VNC_Configuration.PlanType.Professional:
-                        radio128.Enabled = true;
-                        radio256.Enabled = false;
-                        break;
-                    case VNC_Configuration.PlanType.Enterprise:
-                        radio128.Enabled = true;
-                        radio256.Enabled = true;
-                        break;
-                }
-            }
-
-            if (tabControlContent.SelectedIndex == 3)
-            {
-                lblFeaturesSubtitle.Text = "Turn on to enable a feature, subject to permissions for individual users or groups.\n\rTurn off to disable a feature; this cannot be overridden.";
-                switch (vncconfig.Plan)
-                {
-                    case VNC_Configuration.PlanType.Home:
-                        pnlFeatureJoin.Visible = true;
-                        pnlFeatureInfo.Visible = true;
-                        foreach (Control control in pnlFeaturesPaid.Controls)
-                        {
-                            if (control.GetType() == typeof(CheckBox))
-                            {
-                                ((CheckBox)control).Checked = false;
-                                ((CheckBox)control).Enabled = false;
-                            }
-                        }
-                        break;
-                    case VNC_Configuration.PlanType.Professional:
-                        pnlFeaturesPaid.BorderStyle = BorderStyle.None;
-                        break;
-                    case VNC_Configuration.PlanType.Enterprise:
-                        pnlFeaturesPaid.BorderStyle = BorderStyle.None;
-                        break;
-                }
-            }
-
-        }
-
-        private void RadioAuthType_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioVNCAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.VNCAuth; lblPasswordWarning.Visible = false; }
-            else if (radioSystemAuth.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
-            else if (radioSingleSignOn.Checked) { vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn_SystemAuth; lblPasswordWarning.Visible = !passwordenabled; }
-        }
-
-        private void RadioEncryptionType_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio128.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES128; }
-            else if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES256; }
-        }
-
-        private void ChkFeatures_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox chk = (CheckBox)sender;
-            vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", "")).Enabled = chk.Checked;
-        }
-
-        private void LinkLabelSystemAuth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                linkLabelSystemAuth.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250097-Setting-up-System-Authentication");
-            }
-            catch { MessageBox.Show("Unable to open link."); }
-        }
-
-        private void LinkLabelSSO_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                linkLabelSSO.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250257-Setting-up-Single-Sign-on-Authentication-SSO-");
-            }
-            catch { MessageBox.Show("Unable to open link."); }
-        }
-
-        private void LinkLabelUpsell_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                linkLabelUpsell.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://www.realvnc.com/en/connect/pricing/");
-            }
-            catch { MessageBox.Show("Unable to open link."); }
-        }
+        #endregion
     }
 }

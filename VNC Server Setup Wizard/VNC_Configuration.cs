@@ -21,10 +21,18 @@ namespace VNC_Server_Setup_Wizard
         public List<VNC_User> VNCUsers { get; set; }
         public List<VNC_Feature> VNCFeatures { get; set; }
 
+        public string EncryptedPassword { get; set; }
+
         public VNC_Configuration()
         {
             VNCUsers = new List<VNC_User>();
             VNCFeatures = new List<VNC_Feature>();
+        }
+
+        public bool SaveConfiguration()
+        {
+            bool success = true;
+            return success;
         }
     }
 }
