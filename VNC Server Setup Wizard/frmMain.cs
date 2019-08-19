@@ -131,7 +131,7 @@ namespace VNC_Server_Setup_Wizard
             txtBoxPassword1.Visible = showhide;
             txtBoxPassword2.Visible = showhide;
 
-            if (btnConfirmPassword.Enabled)
+            if (vncconfig.EncryptedPassword.Length > 0)
             {
                 txtBoxPassword1.Text = "";
                 txtBoxPassword2.Text = "";
@@ -265,15 +265,16 @@ namespace VNC_Server_Setup_Wizard
 
         private void btnConfirmPassword_Click(object sender, EventArgs e)
         {
-            if (txtBoxPassword1.Text == txtBoxPassword2.Text)
-            {
-                vncconfig.EncryptedPassword = VNC_Password.GetEncryptedPassword(txtBoxPassword1.Text);
-                txtBoxPassword1.Text = "********";
-                txtBoxPassword2.Text = "********";
-                txtBoxPassword1.Enabled = false;
-                txtBoxPassword2.Enabled = false;
-                btnConfirmPassword.Enabled = false;
-            }
+            if (txtBoxPassword1.Text.Length > 0 && txtBoxPassword2.Text.Length > 0)
+                if (txtBoxPassword1.Text == txtBoxPassword2.Text)
+                {
+                    vncconfig.EncryptedPassword = VNC_Password.GetEncryptedPassword(txtBoxPassword1.Text);
+                    txtBoxPassword1.Text = "********";
+                    txtBoxPassword2.Text = "********";
+                    txtBoxPassword1.Enabled = false;
+                    txtBoxPassword2.Enabled = false;
+                    btnConfirmPassword.Enabled = false;
+                }
         }
 
         private void LinkLabelSystemAuth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -404,5 +405,14 @@ namespace VNC_Server_Setup_Wizard
         }
 
         #endregion
+
+        private void TxtBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnConfirmPassword.PerformClick();
+                e.Handled = true;
+            }
+        }
     }
 }
