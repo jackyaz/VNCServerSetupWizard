@@ -224,7 +224,7 @@ namespace VNC_Server_Setup_Wizard
 
         private void BtnApply_Click(object sender, EventArgs e)
         {
-            if (vncconfig.Authentication == VNC_Configuration.AuthenticationType.VNCAuth)
+            if (vncconfig.Authentication == VNC_Configuration.AuthenticationType.VncAuth)
             {
                 if(vncconfig.EncryptedPassword.Length == 0)
                 {
@@ -255,7 +255,7 @@ namespace VNC_Server_Setup_Wizard
         {
             if (radioVNCAuth.Checked)
             {
-                vncconfig.Authentication = VNC_Configuration.AuthenticationType.VNCAuth;
+                vncconfig.Authentication = VNC_Configuration.AuthenticationType.VncAuth;
                 lblPasswordWarning.Visible = false;
                 ToggleVNCPasswordFields(true);
             }

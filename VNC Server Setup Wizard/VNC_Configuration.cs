@@ -10,7 +10,7 @@ namespace VNC_Server_Setup_Wizard
     {
         public enum PlanType { Home, Professional, Enterprise }
         public enum PermissionType { Admin, Standard, ViewOnly, None }
-        public enum AuthenticationType { VNCAuth, SystemAuth, SingleSignOn_SystemAuth }
+        public enum AuthenticationType { VncAuth, SystemAuth, SingleSignOn_SystemAuth }
         public enum EncryptionType { AES128, AES256 }
 
         public readonly string credentialfile = "C:\\ProgramData\\RealVNC-Service\\vncserver.d\\CloudCredentials.bed";
@@ -35,7 +35,14 @@ namespace VNC_Server_Setup_Wizard
             bool success = true;
 
             // Authentication
-            try { RegistryManagement.SetRegistryValue(RegHives.HKLM, "Authentication", this.Authentication.ToString().Replace("_", ",")); }
+            try
+            {
+                RegistryManagement.SetRegistryValue(RegHives.HKLM, "Authentication", this.Authentication.ToString().Replace("_", ","));
+                if(this.Authentication == AuthenticationType.VncAuth)
+                {
+                    RegistryManagement.SetRegistryValue(RegHives.HKLM, "Password", this.EncryptedPassword);
+                }
+            }
             catch { success = false; }
 
             // Encryption
