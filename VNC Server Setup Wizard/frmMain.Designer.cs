@@ -73,6 +73,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.listViewUsersGroups = new VNC_Server_Setup_Wizard.Better_ListView();
+            this.colHeadType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colHeadName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageFinish = new System.Windows.Forms.TabPage();
             this.lblFinishTitle = new System.Windows.Forms.Label();
             this.pnlSplitLine = new System.Windows.Forms.Panel();
@@ -80,9 +83,6 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.listViewUsersGroups = new VNC_Server_Setup_Wizard.Better_ListView();
-            this.colHeadType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colHeadName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -299,6 +299,7 @@
             this.txtBoxPassword2.UseSystemPasswordChar = true;
             this.txtBoxPassword2.Visible = false;
             this.txtBoxPassword2.TextChanged += new System.EventHandler(this.TxtBoxPassword_TextChanged);
+            this.txtBoxPassword2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxPassword_KeyPress);
             // 
             // txtBoxPassword1
             // 
@@ -310,6 +311,7 @@
             this.txtBoxPassword1.UseSystemPasswordChar = true;
             this.txtBoxPassword1.Visible = false;
             this.txtBoxPassword1.TextChanged += new System.EventHandler(this.TxtBoxPassword_TextChanged);
+            this.txtBoxPassword1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxPassword_KeyPress);
             // 
             // lblAuthSubtitle
             // 
@@ -682,6 +684,36 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
+            // listViewUsersGroups
+            // 
+            this.listViewUsersGroups.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.listViewUsersGroups.AutoArrange = false;
+            this.listViewUsersGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colHeadType,
+            this.colHeadName});
+            this.listViewUsersGroups.FullRowSelect = true;
+            this.listViewUsersGroups.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewUsersGroups.Location = new System.Drawing.Point(9, 36);
+            this.listViewUsersGroups.MultiSelect = false;
+            this.listViewUsersGroups.Name = "listViewUsersGroups";
+            this.listViewUsersGroups.ShowGroups = false;
+            this.listViewUsersGroups.Size = new System.Drawing.Size(550, 238);
+            this.listViewUsersGroups.TabIndex = 1;
+            this.listViewUsersGroups.UseCompatibleStateImageBehavior = false;
+            this.listViewUsersGroups.View = System.Windows.Forms.View.Details;
+            this.listViewUsersGroups.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewUsersGroups_ColumnWidthChanging);
+            this.listViewUsersGroups.SelectedIndexChanged += new System.EventHandler(this.ListViewUsersGroups_SelectedIndexChanged);
+            // 
+            // colHeadType
+            // 
+            this.colHeadType.Text = "Type";
+            this.colHeadType.Width = 50;
+            // 
+            // colHeadName
+            // 
+            this.colHeadName.Text = "Name";
+            this.colHeadName.Width = 496;
+            // 
             // tabPageFinish
             // 
             this.tabPageFinish.Controls.Add(this.lblFinishTitle);
@@ -759,36 +791,6 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Visible = false;
             this.btnApply.Click += new System.EventHandler(this.BtnApply_Click);
-            // 
-            // listViewUsersGroups
-            // 
-            this.listViewUsersGroups.Alignment = System.Windows.Forms.ListViewAlignment.Left;
-            this.listViewUsersGroups.AutoArrange = false;
-            this.listViewUsersGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colHeadType,
-            this.colHeadName});
-            this.listViewUsersGroups.FullRowSelect = true;
-            this.listViewUsersGroups.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewUsersGroups.Location = new System.Drawing.Point(9, 36);
-            this.listViewUsersGroups.MultiSelect = false;
-            this.listViewUsersGroups.Name = "listViewUsersGroups";
-            this.listViewUsersGroups.ShowGroups = false;
-            this.listViewUsersGroups.Size = new System.Drawing.Size(550, 238);
-            this.listViewUsersGroups.TabIndex = 1;
-            this.listViewUsersGroups.UseCompatibleStateImageBehavior = false;
-            this.listViewUsersGroups.View = System.Windows.Forms.View.Details;
-            this.listViewUsersGroups.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewUsersGroups_ColumnWidthChanging);
-            this.listViewUsersGroups.SelectedIndexChanged += new System.EventHandler(this.ListViewUsersGroups_SelectedIndexChanged);
-            // 
-            // colHeadType
-            // 
-            this.colHeadType.Text = "Type";
-            this.colHeadType.Width = 50;
-            // 
-            // colHeadName
-            // 
-            this.colHeadName.Text = "Name";
-            this.colHeadName.Width = 496;
             // 
             // frmMain
             // 
