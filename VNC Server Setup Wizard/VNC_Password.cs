@@ -10,23 +10,19 @@ namespace VNC_Server_Setup_Wizard
         {
             Process pwdps = new Process();
             pwdps.StartInfo.FileName = "cmd.exe";
-            pwd = pwd.Replace("^","^^^^").Replace("&","^^^&").Replace("<","^^^<").Replace(">","^^^>").Replace("|","^^^|").Replace("\"", "^^^\"");
+            pwd = pwd.Replace("^", "^^^^").Replace("&", "^^^&").Replace("<", "^^^<").Replace(">", "^^^>").Replace("|", "^^^|").Replace("\"", "^^^\"");
             pwdps.StartInfo.Arguments = "/c chcp 65001 >nul & echo " + pwd + " | \"C:\\Program Files\\RealVNC\\VNC Server\\vncpasswd.exe\" -print";
             pwdps.StartInfo.UseShellExecute = false;
             pwdps.StartInfo.RedirectStandardOutput = true;
             pwdps.StartInfo.RedirectStandardError = true;
+            pwdps.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            pwdps.StartInfo.CreateNoWindow = true;
             pwdps.Start();
             string output = pwdps.StandardOutput.ReadToEnd();
             string error = pwdps.StandardError.ReadToEnd();
             string encpwd = "";
-            if (output.Length > 0)
-            {
-                encpwd = output.Substring(9);
-            }
-            if (error.Length > 0)
-            {
-                encpwd = "error";
-            }
+            if (output.Length > 0) { encpwd = output.Substring(9).Replace(Environment.NewLine, ""); }
+            if (error.Length > 0) { encpwd = "error"; }
             pwdps.WaitForExit();
             return encpwd;
         }
