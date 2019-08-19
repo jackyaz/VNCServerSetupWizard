@@ -222,8 +222,23 @@ namespace VNC_Server_Setup_Wizard
 
         private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
 
-        private void BtnApply_Click(object sender, EventArgs e) { }
+        private void BtnApply_Click(object sender, EventArgs e)
+        {
+            if (vncconfig.Authentication == VNC_Configuration.AuthenticationType.VNCAuth)
+            {
+                if(vncconfig.EncryptedPassword.Length == 0)
+                {
+                    MessageBox.Show("You need to set a VNC Password", "VNC Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    listBxMenu.SelectedIndex = 1;
+                    return;
+                }
+            }
 
+            if (vncconfig.SaveConfiguration())
+            {
+                Application.Exit();
+            }
+        }            
         private void LinkLabelUpsell_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try

@@ -27,11 +27,45 @@ namespace VNC_Server_Setup_Wizard
         {
             VNCUsers = new List<VNC_User>();
             VNCFeatures = new List<VNC_Feature>();
+            EncryptedPassword = "";
         }
 
         public bool SaveConfiguration()
         {
             bool success = true;
+
+            // Authentication
+            try { RegistryManagement.SetRegistryValue(RegHives.HKLM, "Authentication", this.Authentication.ToString().Replace("_", ",")); }
+            catch { success = false; }
+
+            // Encryption
+            string encryption = "";
+            if (this.Encryption == EncryptionType.AES128) { encryption = "AlwaysOn"; } else if (this.Encryption == EncryptionType.AES256) { encryption = "AlwaysMaximum"; }
+            try { RegistryManagement.SetRegistryValue(RegHives.HKLM, "Encryption", encryption); }
+            catch { success = false; }
+
+            // Features
+            foreach (VNC_Feature feature in VNCFeatures)
+            {
+                string enabled = "0";
+                if (feature.Enabled) { enabled = "1"; } else { enabled = "0"; }
+
+                if (feature.Name == VNC_Feature.FeatureName.CutText)
+                {
+                    try
+                    {
+                        RegistryManagement.SetRegistryValue(RegHives.HKLM, "AcceptCutText", enabled);
+                        RegistryManagement.SetRegistryValue(RegHives.HKLM, "SendCutText", enabled);
+                    }
+                    catch { success = false; }
+                }
+                else
+                {
+                    try { RegistryManagement.SetRegistryValue(RegHives.HKLM, feature.Name.ToString(), enabled); ; }
+                    catch { success = false; }
+                }
+            }
+
             return success;
         }
     }
