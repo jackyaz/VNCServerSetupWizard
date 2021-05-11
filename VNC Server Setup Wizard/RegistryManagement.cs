@@ -37,7 +37,7 @@ namespace VNC_Server_Setup_Wizard
             else { regkey = RegistryManagement.GetHKLM().OpenSubKey("SOFTWARE\\RealVNC", false); }
             string value = "";
             try { value = regkey.GetValue(valuename).ToString(); regkey.Close(); }
-            catch { }
+            catch {  }
             return value;
         }
 
