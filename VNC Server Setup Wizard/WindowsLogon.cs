@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VNC_Server_Setup_Wizard
 {
-    public static class WindowsLogon
+    internal static class WindowsLogon
     {
         private enum LogonType
         {
@@ -101,12 +97,7 @@ namespace VNC_Server_Setup_Wizard
             {
                 IntPtr phToken;
 
-                bool loggedIn = LogonUser(Environment.UserName,
-                    null,
-                    "",
-                    (int)LogonType.LOGON32_LOGON_INTERACTIVE,
-                    (int)LogonProvider.LOGON32_PROVIDER_DEFAULT,
-                     out phToken);
+                bool loggedIn = LogonUser(Environment.UserName, null, "", (int)LogonType.LOGON32_LOGON_INTERACTIVE, (int)LogonProvider.LOGON32_PROVIDER_DEFAULT, out phToken);
 
                 int error = Marshal.GetLastWin32Error();
 
