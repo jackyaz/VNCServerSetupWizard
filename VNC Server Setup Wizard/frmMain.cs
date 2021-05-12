@@ -3,155 +3,146 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.DirectoryServices.AccountManagement;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Tulpep.ActiveDirectoryObjectPicker;
 
 namespace VNC_Server_Setup_Wizard
 {
-    public partial class frmMain : Form
+    public partial class FrmMain : Form
     {
         #region Variable declaration
-        private bool domainmember = WindowsLogon.DomainMember;
-        private VNC_Configuration vncconfig = new VNC_Configuration();
-        private bool passwordenabled = WindowsLogon.PasswordEnabled;
+        private VNC_Configuration vncconfig;
         #endregion
 
         #region Form Constructor
-        public frmMain()
+        public FrmMain()
         {
+            vncconfig = new VNC_Configuration();
             InitializeComponent();
-            listBxMenu.SelectedIndex = 0;
-            listViewUsersGroups.Columns[1].Width = -2;
-            SetConfigFromPlan(GetPlanType());
-
-            for (int i = 0; i < listBxMenu.Items.Count; i++)
-            {
-                if (listBxMenu.Items[i].ToString() == "Users & Permissions") { listBxMenu.Items.RemoveAt(i); }
-            }
         }
+
         #endregion
 
-        private string GetPlanType()
+        private void FrmMain_Shown(object sender, EventArgs e)
         {
-            string plantype = "";
-            if (File.Exists(vncconfig.credentialfile))
-            {
-                string cloudcreds = "";
-                cloudcreds = File.ReadAllText(vncconfig.credentialfile);
-                plantype = cloudcreds.Substring(cloudcreds.LastIndexOf("cloud/plan") + 10, cloudcreds.IndexOf("cloud/principal") - (cloudcreds.LastIndexOf("cloud/plan") + 10));
-                plantype = Regex.Replace(new string(plantype.Where(c => !char.IsControl(c)).ToArray()), @"[^\u0000-\u007F]", string.Empty);
-                cloudcreds = null;
-            }
-            else if (RegistryManagement.GetRegistryValue(RegHives.HKLM_License, "vncserver_license").Length > 1)
-            {
-                plantype = "Enterprise";
-            }
-            return plantype;
+            listBxMenu.SelectedIndex = 0;
+            //listViewUsersGroups.Columns[1].Width = -2;
+            //vncconfig.Plan = VNC_Configuration.PlanType.Home;
+            SetOptionsFromConfig();
+            SetAvailableOptionsFromPlan();
+            lblSubType.Text = "Detected subscription type as: " + vncconfig.Plan;
         }
 
-        private void SetConfigFromPlan(string plantype)
+        #region Set Available options and config
+
+        private void SetAvailableOptionsFromPlan()
         {
-            switch (plantype)
+            switch (vncconfig.Plan)
             {
-                case "Home":
-                    vncconfig.Plan = VNC_Configuration.PlanType.Home;
+                case VNC_Configuration.PlanType.Home:
                     radioVNCAuth.Checked = true;
+                    radio128.Checked = true;
+                    cbDirect.Checked = false;
                     radioVNCAuth.Enabled = true;
                     radioSystemAuth.Enabled = false;
                     radioSingleSignOn.Enabled = false;
-                    ToggleVNCPasswordFields(true);
+                    radioCertificate.Enabled = false;
                     radio128.Enabled = true;
-                    radio128.Checked = true;
                     radio256.Enabled = false;
-                    foreach (Control control in pnlFeaturesPaid.Controls)
-                    {
-                        if (control.GetType() == typeof(CheckBox))
-                        {
-                            ((CheckBox)control).Checked = false;
-                        }
-                    }
-                    VNC_Feature.EnableFreeFeatures(vncconfig);
-                    pnlFeatureJoin.Visible = true;
-                    pnlFeatureInfo.Visible = true;
-                    foreach (Control control in pnlFeaturesPaid.Controls)
-                    {
-                        if (control.GetType() == typeof(CheckBox))
-                        {
-                            ((CheckBox)control).Checked = false;
-                            ((CheckBox)control).Enabled = false;
-                        }
-                    }
+                    cbDirect.Enabled = false;
                     linkLabelUpsell.Visible = true;
                     break;
-                case "Professional":
-                    vncconfig.Plan = VNC_Configuration.PlanType.Professional;
-                    radioVNCAuth.Enabled = true;
-                    radioSystemAuth.Enabled = passwordenabled;
-                    radioSystemAuth.Checked = true;
-                    lblPasswordWarning.Visible = !passwordenabled;
-                    radioSingleSignOn.Enabled = false;
-                    ToggleVNCPasswordFields(false);
-                    radio128.Enabled = true;
+                case VNC_Configuration.PlanType.Professional:
                     radio128.Checked = true;
-                    radio256.Enabled = false;
-                    VNC_Feature.EnableAllFeatures(vncconfig);
-                    pnlFeaturesPaid.BorderStyle = BorderStyle.None;
-                    break;
-                case "Enterprise":
-                    vncconfig.Plan = VNC_Configuration.PlanType.Enterprise;
+                    cbDirect.Checked = false;
                     radioVNCAuth.Enabled = true;
-                    radioSystemAuth.Enabled = passwordenabled;
-                    radioSystemAuth.Checked = true;
-                    lblPasswordWarning.Visible = !passwordenabled;
-                    if (domainmember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; lblDomainInfo.Visible = true; }
-                    ToggleVNCPasswordFields(false);
+                    radioSystemAuth.Enabled = WindowsLogon.PasswordEnabled;
+                    lblPasswordWarning.Visible = !WindowsLogon.PasswordEnabled;
+                    radioSingleSignOn.Enabled = false;
+                    if (WindowsLogon.DomainMember) { radioCertificate.Enabled = true; } else { radioCertificate.Enabled = false; lblDomainInfo.Visible = true; }
+                    radio128.Enabled = true;
+                    radio256.Enabled = false;
+                    cbDirect.Enabled = false;
+                    break;
+                case VNC_Configuration.PlanType.Enterprise:
+                    radioVNCAuth.Enabled = true;
+                    radioSystemAuth.Enabled = WindowsLogon.PasswordEnabled;
+                    lblPasswordWarning.Visible = !WindowsLogon.PasswordEnabled;
+                    if (WindowsLogon.DomainMember) { radioSingleSignOn.Enabled = true; } else { radioSingleSignOn.Enabled = false; lblDomainInfo.Visible = true; }
+                    if (WindowsLogon.DomainMember) { radioCertificate.Enabled = true; } else { radioCertificate.Enabled = false; lblDomainInfo.Visible = true; }
                     radio128.Enabled = true;
                     radio256.Enabled = true;
-                    radio256.Checked = true;
-                    VNC_Feature.EnableAllFeatures(vncconfig);
-                    pnlFeaturesPaid.BorderStyle = BorderStyle.None;
+                    cbDirect.Enabled = true;
                     break;
-                default:
+                case VNC_Configuration.PlanType.None:
                     MessageBox.Show("Please run the License Wizard to apply your subscription to VNC Server", "VNC Server is not licensed!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    Environment.Exit(0);
+                    listBxMenu.SelectedIndex = 0;
                     break;
             }
         }
 
-        private void ToggleVNCPasswordFields(bool showhide)
+        private void SetOptionsFromConfig()
         {
-            lblPassword1.Visible = showhide;
-            lblPassword2.Visible = showhide;
-            txtBoxPassword1.Visible = showhide;
-            txtBoxPassword2.Visible = showhide;
-
-            if (vncconfig.EncryptedPassword.Length > 0)
+            switch (vncconfig.Authentication)
             {
-                txtBoxPassword1.Text = "";
-                txtBoxPassword2.Text = "";
+                case VNC_Configuration.AuthenticationType.VncAuth:
+                    radioVNCAuth.Checked = true;
+                    btnSetVNCPassword.Visible = true;
+                    break;
+                case VNC_Configuration.AuthenticationType.SystemAuth:
+                    radioSystemAuth.Checked = true;
+                    btnSetVNCPassword.Visible = false;
+                    break;
+                case VNC_Configuration.AuthenticationType.SingleSignOn:
+                    radioSingleSignOn.Checked = true;
+                    btnSetVNCPassword.Visible = false;
+                    break;
+                case VNC_Configuration.AuthenticationType.Certificate:
+                    radioCertificate.Checked = true;
+                    btnSetVNCPassword.Visible = false;
+
+                    break;
             }
 
-            CheckVNCPassword();
-            btnConfirmPassword.Visible = showhide;
+            switch (vncconfig.Encryption)
+            {
+                case VNC_Configuration.EncryptionType.AlwaysOn:
+                    radio128.Checked = true;
+                    break;
+                case VNC_Configuration.EncryptionType.AlwaysMaximum:
+                    radio256.Checked = true;
+                    break;
+            }
+
+            switch (vncconfig.Permissions)
+            {
+                case VNC_Configuration.PermissionsType.Adminstrators:
+                    radioAdministrators.Checked = true;
+                    break;
+                case VNC_Configuration.PermissionsType.Users:
+                    radioUsers.Checked = true;
+                    break;
+                case VNC_Configuration.PermissionsType.CurrentUser:
+                    radioCurrentUser.Checked = true;
+                    break;
+                case VNC_Configuration.PermissionsType.Custom:
+                    radioCustomPermissions.Checked = true;
+                    txtPermissionsCustom.Text = vncconfig.PermissionsString;
+                    break;
+            }
+
+            cbQryConn.Checked = vncconfig.AttendedAccess;
+
+            cbCloudRfb.Checked = vncconfig.CloudRfb;
+            cbCloudRelay.Checked = vncconfig.CloudRelay;
+            cbDirect.Checked = vncconfig.DirectRfb;
         }
 
-        private void CheckVNCPassword()
-        {
-            if (txtBoxPassword1.Text != txtBoxPassword2.Text)
-            {
-                lblVNCPasswordMatch.Visible = true;
-            }
-            else if (txtBoxPassword1.Text == txtBoxPassword2.Text)
-            {
-                lblVNCPasswordMatch.Visible = false;
-            }
-        }
+        #endregion
+
+        #region Custom Draw Event
 
         private void ListBxMenu_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -171,85 +162,141 @@ namespace VNC_Server_Setup_Wizard
             e.DrawFocusRectangle();
         }
 
-        private void ListBxMenu_SelectedIndexChanged(object sender, EventArgs e)
+        #endregion
+
+        #region FormUI
+        private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
+        //private void CheckboxState(bool enabledisable, CheckBox chkbox) { chkbox.Enabled = enabledisable; chkbox.Checked = enabledisable; }
+
+        private void NavState(bool enabledisable)
         {
-            switch (listBxMenu.SelectedIndex)
-            {
-                case 0:
-                    ButtonState(true, btnNext);
-                    ButtonState(false, btnBack);
-                    ButtonState(false, btnApply);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
-                    break;
-                case 1:
-                    ButtonState(true, btnNext);
-                    ButtonState(true, btnBack);
-                    ButtonState(false, btnApply);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
-                    break;
-                case 2:
-                    ButtonState(true, btnNext);
-                    ButtonState(true, btnBack);
-                    ButtonState(false, btnApply);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
-                    break;
-                case 3:
-                    ButtonState(true, btnNext);
-                    ButtonState(true, btnBack);
-                    ButtonState(false, btnApply);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
-                    break;
-                /*case 4:
-                    ButtonState(true, btnNext);
-                    ButtonState(true, btnBack);
-                    ButtonState(false, btnApply);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex);
-                    break;
-                case 5:*/
-                case 4:
-                    ButtonState(false, btnNext);
-                    ButtonState(true, btnBack);
-                    ButtonState(true, btnApply);
-                    tabControlContent.SelectTab(listBxMenu.SelectedIndex + 1);
-                    break;
-            }
+            btnNext.Enabled = enabledisable;
+            btnBack.Enabled = enabledisable;
+            btnSave.Enabled = enabledisable;
+            listBxMenu.Enabled = enabledisable;
+        }
+        private void AccessControlState(bool enabledisable)
+        {
+            radioAdministrators.Enabled = enabledisable;
+            radioCurrentUser.Enabled = enabledisable;
+            radioUsers.Enabled = enabledisable;
+            radioCustomPermissions.Enabled = enabledisable;
+            lblAccessControlInfo.Visible = !enabledisable;
+
+            if (enabledisable == true && radioCustomPermissions.Checked) { txtPermissionsCustom.Enabled = true; }
+            else { txtPermissionsCustom.Enabled = false; }
         }
 
-        private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
-        private void CheckboxState(bool enabledisable, CheckBox chkbox) { chkbox.Enabled = enabledisable; chkbox.Checked = enabledisable; }
+        private void ListBxMenu_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBxMenu.SelectedIndex == 0)
+            {
+                ButtonState(true, btnNext);
+                ButtonState(false, btnBack);
+                ButtonState(false, btnSave);
+            }
+            else if (listBxMenu.SelectedIndex == listBxMenu.Items.Count - 1)
+            {
+
+                ButtonState(false, btnNext);
+                ButtonState(true, btnBack);
+                ButtonState(true, btnSave);
+            }
+            else
+            {
+                ButtonState(true, btnNext);
+                ButtonState(true, btnBack);
+                ButtonState(false, btnSave);
+            }
+            tabControlContent.SelectTab(listBxMenu.SelectedIndex);
+        }
 
         private void BtnBack_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex -= 1; }
 
         private void BtnNext_Click(object sender, EventArgs e) { listBxMenu.SelectedIndex += 1; }
 
-        private void BtnApply_Click(object sender, EventArgs e)
+        private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (vncconfig.Authentication == VNC_Configuration.AuthenticationType.VncAuth)
+            if (vncconfig.Authentication == VNC_Configuration.AuthenticationType.VncAuth && RegistryManagement.GetRegistryValue(RegHives.HKLM, "Password").Length == 0)
             {
-                if(vncconfig.EncryptedPassword.Length == 0)
-                {
-                    MessageBox.Show("You need to set a VNC Password", "VNC Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    listBxMenu.SelectedIndex = 1;
-                    return;
-                }
+                MessageBox.Show("You need to set a VNC Password", "VNC Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                listBxMenu.SelectedIndex = 1;
+                return;
             }
 
-            if (vncconfig.SaveConfiguration())
+            if (vncconfig.CloudRfb == false && vncconfig.DirectRfb == false)
             {
-                Application.Exit();
+                MessageBox.Show("No connection types are enabled for VNC Server, please enable one", "No connectivity enabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                listBxMenu.SelectedIndex = 3;
+                return;
             }
-        }            
-        private void LinkLabelUpsell_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+
+            if (vncconfig.SaveConfigurationToRegistry())
+            {
+                listBxMenu.Enabled = false;
+                NavState(false);
+                lblCloudName.Text = "Name: " + vncconfig.CloudName;
+                lblCloudTeam.Text = "Team: " + vncconfig.CloudTeam;
+                lblRfbHostAddress.Text = "Hostname: " + vncconfig.RfbHostAddress;
+                lblRfbIPAddress.Text = "IP Address: " + vncconfig.RfbIPAddress;
+                lblRfbPort.Text = "Port: " + vncconfig.RfbPort.ToString();
+
+                if (vncconfig.CloudRfb == true) { groupBoxConnectCloud.Visible = true; }
+                if (vncconfig.DirectRfb == true) { groupBoxConnectDirect.Visible = true; }
+
+                if ((vncconfig.CloudRfb == true && vncconfig.DirectRfb == false) || (vncconfig.CloudRfb == false && vncconfig.DirectRfb == true))
+                {
+                    //left 73,39
+                    //centre 176,39
+                    //right 279,39
+                    groupBoxConnectCloud.Location = new Point(176, 65);
+                    groupBoxConnectDirect.Location = new Point(176, 65);
+                }
+
+                groupBoxFinish.Visible = true;
+            }
+        }
+
+        private void BtnDone_Click(object sender, EventArgs e)
         {
+            Close();
+        }
+
+        private void LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LinkLabel linklabel = (LinkLabel)sender;
             try
             {
-                linkLabelUpsell.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://www.realvnc.com/en/connect/pricing/");
+                linklabel.LinkVisited = false;
+                System.Diagnostics.Process.Start(linklabel.Tag.ToString());
             }
             catch { MessageBox.Show("Unable to open link."); }
         }
 
-        #region Authentication Tab events
+        #endregion
+
+        #region Welcome Tab    
+
+        private void BtnLicenseWiz_Click(object sender, EventArgs e)
+        {
+            if (!btnLicenseWiz.Enabled) { return; }
+            NavState(false);
+            System.Diagnostics.Process lwProc = new System.Diagnostics.Process();
+            lwProc.StartInfo.UseShellExecute = false;
+            lwProc.StartInfo.FileName = @"C:\Program Files\RealVNC\VNC Server\vnclicensewiz.exe";
+            lwProc.Start();
+            lwProc.WaitForExit();
+            vncconfig = new VNC_Configuration();
+            SetOptionsFromConfig();
+            SetAvailableOptionsFromPlan();
+            lblSubType.Text = "Detected subscription type as: " + vncconfig.Plan;
+            Application.DoEvents();
+            NavState(true);
+        }
+
+        #endregion
+
+        #region Authentication & Encryption Tab
 
         private void RadioAuthType_CheckedChanged(object sender, EventArgs e)
         {
@@ -257,177 +304,168 @@ namespace VNC_Server_Setup_Wizard
             {
                 vncconfig.Authentication = VNC_Configuration.AuthenticationType.VncAuth;
                 lblPasswordWarning.Visible = false;
-                ToggleVNCPasswordFields(true);
+                btnSetVNCPassword.Visible = true;
+                AccessControlState(false);
             }
             else if (radioSystemAuth.Checked)
             {
                 vncconfig.Authentication = VNC_Configuration.AuthenticationType.SystemAuth;
-                lblPasswordWarning.Visible = !passwordenabled;
-                ToggleVNCPasswordFields(false);
+                lblPasswordWarning.Visible = !WindowsLogon.PasswordEnabled;
+                btnSetVNCPassword.Visible = false;
+                AccessControlState(true);
             }
             else if (radioSingleSignOn.Checked)
             {
-                vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn_SystemAuth;
-                lblPasswordWarning.Visible = !passwordenabled;
-                ToggleVNCPasswordFields(false);
+                vncconfig.Authentication = VNC_Configuration.AuthenticationType.SingleSignOn;
+                lblPasswordWarning.Visible = !WindowsLogon.PasswordEnabled;
+                btnSetVNCPassword.Visible = false;
+                AccessControlState(true);
             }
-        }
-
-        private void TxtBoxPassword_TextChanged(object sender, EventArgs e)
-        {
-            CheckVNCPassword();
-        }
-
-        private void btnConfirmPassword_Click(object sender, EventArgs e)
-        {
-            if (txtBoxPassword1.Text.Length > 0 && txtBoxPassword2.Text.Length > 0)
-                if (txtBoxPassword1.Text == txtBoxPassword2.Text)
-                {
-                    vncconfig.EncryptedPassword = VNC_Password.GetEncryptedPassword(txtBoxPassword1.Text);
-                    txtBoxPassword1.Text = "********";
-                    txtBoxPassword2.Text = "********";
-                    txtBoxPassword1.Enabled = false;
-                    txtBoxPassword2.Enabled = false;
-                    btnConfirmPassword.Enabled = false;
-                }
-        }
-
-        private void LinkLabelSystemAuth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
+            else if (radioCertificate.Checked)
             {
-                linkLabelSystemAuth.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250097-Setting-up-System-Authentication");
+                vncconfig.Authentication = VNC_Configuration.AuthenticationType.Certificate;
+                lblPasswordWarning.Visible = false;
+                btnSetVNCPassword.Visible = false;
+                AccessControlState(true);
             }
-            catch { MessageBox.Show("Unable to open link."); }
         }
-
-        private void LinkLabelSSO_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                linkLabelSSO.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://help.realvnc.com/hc/en-us/articles/360002250257-Setting-up-Single-Sign-on-Authentication-SSO-");
-            }
-            catch { MessageBox.Show("Unable to open link."); }
-        }
-
-        #endregion
-
-        #region Encryption Tab events
 
         private void RadioEncryptionType_CheckedChanged(object sender, EventArgs e)
         {
-            if (radio128.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES128; }
-            else if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AES256; }
+            if (radio128.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AlwaysOn; }
+            else if (radio256.Checked) { vncconfig.Encryption = VNC_Configuration.EncryptionType.AlwaysMaximum; }
+        }
+
+        private void SetVNCPassword_Click(object sender, EventArgs e)
+        {
+            FrmVNCPassword frmpwd = new FrmVNCPassword();
+            frmpwd.ShowDialog();
         }
 
         #endregion
 
-        #region Feature Tab events
+        #region Access Control Tab
 
-        private void ChkFeatures_CheckedChanged(object sender, EventArgs e)
+        #region Basic
+        private void RadioPermissionsType_CheckedChanged(object sender, EventArgs e)
         {
-            CheckBox chk = (CheckBox)sender;
-            vncconfig.VNCFeatures.Find(x => x.Name.ToString() == chk.Name.Replace("chk", "")).Enabled = chk.Checked;
-        }
-
-        #endregion
-
-        #region Users & Permissions Tab events
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
+            if (radioAdministrators.Checked)
             {
-                AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups,
-                DefaultObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups,
-                AllowedLocations = Locations.All,
-                MultiSelect = true,
-                ShowAdvancedView = true
-            };
-
-            if (domainmember) { picker.DefaultLocations = Locations.JoinedDomain; }
-            else { picker.DefaultLocations = Locations.LocalComputer; }
-
-            if (picker.ShowDialog() == DialogResult.OK)
+                vncconfig.Permissions = VNC_Configuration.PermissionsType.Adminstrators;
+                txtPermissionsCustom.Enabled = false;
+                linkLabelPermissionsCreator.Visible = false;
+            }
+            else if (radioUsers.Checked)
             {
-                foreach (var sel in picker.SelectedObjects)
-                {
-                    if (sel.Name.Length > 0)
-                    {
-                        ContextType ctxtype;
-
-                        if (domainmember) { ctxtype = ContextType.Domain; }
-                        else { ctxtype = ContextType.Machine; }
-
-                        PrincipalContext prictx = new PrincipalContext(ctxtype);
-                        UserPrincipal user = new UserPrincipal(prictx);
-                        GroupPrincipal group = new GroupPrincipal(prictx);
-                        var searcher = new PrincipalSearcher();
-
-                        if (sel.SchemaClassName.ToLower() == "user")
-                        {
-                            if (sel.Path.Contains("WinNT")) { user.SamAccountName = sel.Name; }
-                            else { user.UserPrincipalName = sel.Upn; }
-                            searcher = new PrincipalSearcher(user);
-                            user = searcher.FindOne() as UserPrincipal;
-                            if (user == null) { user = new UserPrincipal(prictx); }
-                        }
-                        else if (sel.SchemaClassName.ToLower() == "group")
-                        {
-                            group.SamAccountName = sel.Name;
-                            searcher = new PrincipalSearcher(group);
-                            group = searcher.FindOne() as GroupPrincipal;
-                            if (group == null) { group = new GroupPrincipal(prictx); }
-                        }
-
-                        if (user.Sid != null)
-                        {
-                            ListViewItem item = new ListViewItem(sel.SchemaClassName);
-                            item.SubItems.Add(user.SamAccountName);
-                            item.SubItems.Add(user.Sid.ToString());
-                            listViewUsersGroups.Items.Add(item);
-                        }
-                        else if (group.Sid != null)
-                        {
-                            ListViewItem item = new ListViewItem(sel.SchemaClassName);
-                            item.SubItems.Add(group.SamAccountName);
-                            item.SubItems.Add("%" + group.Sid.ToString());
-                            listViewUsersGroups.Items.Add(item);
-                        }
-                    }
-                }
+                vncconfig.Permissions = VNC_Configuration.PermissionsType.Users;
+                txtPermissionsCustom.Enabled = false;
+                linkLabelPermissionsCreator.Visible = false;
+            }
+            else if (radioCurrentUser.Checked)
+            {
+                vncconfig.Permissions = VNC_Configuration.PermissionsType.CurrentUser;
+                txtPermissionsCustom.Enabled = false;
+                linkLabelPermissionsCreator.Visible = false;
+            }
+            else if (radioCustomPermissions.Checked)
+            {
+                vncconfig.Permissions = VNC_Configuration.PermissionsType.Custom;
+                txtPermissionsCustom.Enabled = true;
+                linkLabelPermissionsCreator.Visible = true;
             }
         }
-
-        private void ListViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
+        private void QryConn_CheckedChanged(object sender, EventArgs e)
         {
-            if (listViewUsersGroups.SelectedItems.Count > 0)
+            if (cbQryConn.Checked == true)
             {
-                textBox1.Text = listViewUsersGroups.SelectedItems[0].SubItems[2].Text;
+                vncconfig.AttendedAccess = true;
             }
             else
             {
-                textBox1.Text = "";
+                vncconfig.AttendedAccess = false;
             }
-        }
-
-        private void ListViewUsersGroups_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-            e.NewWidth = this.listViewUsersGroups.Columns[e.ColumnIndex].Width;
-            e.Cancel = true;
         }
 
         #endregion
 
-        private void TxtBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
+        #region Advanced
+        //private void AddUserGroup_Click(object sender, EventArgs e)
+        //{
+        //    DirectoryObjectPickerDialog picker = new DirectoryObjectPickerDialog()
+        //    {
+        //        AllowedObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups,
+        //        DefaultObjectTypes = ObjectTypes.Users | ObjectTypes.Groups | ObjectTypes.BuiltInGroups,
+        //        AllowedLocations = Locations.All,
+        //        MultiSelect = true,
+        //        ShowAdvancedView = true
+        //    };
+
+        //    if (WindowsLogon.DomainMember) { picker.DefaultLocations = Locations.JoinedDomain; }
+        //    else { picker.DefaultLocations = Locations.LocalComputer; }
+
+        //    if (picker.ShowDialog() == DialogResult.OK)
+        //    {
+        //        foreach (DirectoryObject sel in picker.SelectedObjects)
+        //        {
+        //            VNC_User vncuser = new VNC_User(sel.Name, sel.Path, sel.SchemaClassName, sel.Upn);
+        //            ListViewItem item = new ListViewItem(vncuser.Type.ToString());
+        //            item.SubItems.Add(vncuser.Name);
+        //            item.SubItems.Add(vncuser.SID);
+        //            listViewUsersGroups.Items.Add(item);
+        //        }
+        //    }
+        //}
+
+        //private void ListViewUsersGroups_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    textBox1.Text = "";
+        //    foreach (ListViewItem item in listViewUsersGroups.SelectedItems)
+        //    {
+        //        textBox1.Text += item.SubItems[2].Text + ",";
+        //    }
+        //    textBox1.Text = textBox1.Text.TrimEnd(',');
+        //}
+
+        //private void ListViewUsersGroups_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        //{
+        //    e.NewWidth = listViewUsersGroups.Columns[e.ColumnIndex].Width;
+        //    e.Cancel = true;
+        //}
+
+        #endregion
+
+        #endregion
+
+        #region Connections Tab
+
+        private void ConnectionType_CheckedChanged(object sender, EventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            CheckBox cb = (CheckBox)sender;
+            if (cb.Name == "cbCloudRfb")
             {
-                btnConfirmPassword.PerformClick();
-                e.Handled = true;
+                cbCloudRelay.Enabled = cbCloudRfb.Checked;
+                vncconfig.CloudRfb = cbCloudRfb.Checked;
+            }
+            else if (cb.Name == "cbCloudRelay")
+            {
+                vncconfig.CloudRelay = cbCloudRelay.Checked;
+            }
+            else if (cb.Name == "cbDirect")
+            {
+                vncconfig.DirectRfb = cbDirect.Checked;
+            }
+
+            if (cbCloudRfb.Checked == false && cbDirect.Checked == false)
+            {
+                lblConnectionWarning.Visible = true;
+            }
+            else
+            {
+                lblConnectionWarning.Visible = false;
             }
         }
+
+        #endregion
+
     }
 }

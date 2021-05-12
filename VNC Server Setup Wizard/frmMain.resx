@@ -117,4 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblLicenseWiz.Text" xml:space="preserve">
+    <value>If this is not correct you can run the license wizard and sign in using your RealVNC account to apply your subscription to VNC Server. 
+
+If you don't yet have an account or a subscription, sign up at </value>
+  </data>
 </root>
