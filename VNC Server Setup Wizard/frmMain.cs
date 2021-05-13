@@ -246,13 +246,10 @@ namespace VNC_Server_Setup_Wizard
 
                 if ((vncconfig.CloudRfb == true && vncconfig.DirectRfb == false) || (vncconfig.CloudRfb == false && vncconfig.DirectRfb == true))
                 {
-                    //left 73,39
-                    //centre 176,39
-                    //right 279,39
-                    groupBoxConnectCloud.Location = new Point(176, 65);
-                    groupBoxConnectDirect.Location = new Point(176, 65);
+                    //left 73, centre 176, right 279
+                    groupBoxConnectCloud.Left = 176;
+                    groupBoxConnectDirect.Left = 176;
                 }
-
                 groupBoxFinish.Visible = true;
             }
         }
