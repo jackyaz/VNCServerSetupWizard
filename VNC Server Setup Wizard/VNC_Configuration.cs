@@ -32,6 +32,7 @@ namespace VNC_Server_Setup_Wizard
         public bool CloudRfb { get; set; }
         public bool CloudRelay { get; set; }
         public bool DirectRfb { get; set; }
+        public bool CloudEnabled { get; private set; }
         public string CloudName { get; private set; }
         public string CloudTeam { get; private set; }
         public string RfbIPAddress { get; private set; }
@@ -41,6 +42,7 @@ namespace VNC_Server_Setup_Wizard
         public VNC_Configuration()
         {
             SetPlanType();
+            SetCloudEnabled();
             SetCloudName();
             SetCloudTeam();
             SetRfbHostAddress();
@@ -73,6 +75,11 @@ namespace VNC_Server_Setup_Wizard
 
             Enum.TryParse(plantype, out PlanType enumplantype);
             this.Plan = enumplantype;
+        }
+
+        private void SetCloudEnabled()
+        {
+            CloudEnabled = File.Exists(credentialfile);
         }
 
         #region Connection Information
