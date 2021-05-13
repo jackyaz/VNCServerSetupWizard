@@ -138,6 +138,8 @@ namespace VNC_Server_Setup_Wizard
             cbCloudRfb.Checked = vncconfig.CloudRfb;
             cbCloudRelay.Checked = vncconfig.CloudRelay;
             cbDirect.Checked = vncconfig.DirectRfb;
+
+            ConnectionsState(vncconfig.CloudEnabled);
         }
 
         #endregion
@@ -185,6 +187,12 @@ namespace VNC_Server_Setup_Wizard
 
             if (enabledisable == true && radioCustomPermissions.Checked) { txtPermissionsCustom.Enabled = true; }
             else { txtPermissionsCustom.Enabled = false; }
+        }
+        private void ConnectionsState(bool enabledisable)
+        {
+            cbCloudRfb.Enabled = enabledisable;
+            cbCloudRelay.Enabled = enabledisable;
+            lblCloudNotJoinedInfo.Visible = !enabledisable;
         }
 
         private void ListBxMenu_SelectedIndexChanged(object sender, EventArgs e)

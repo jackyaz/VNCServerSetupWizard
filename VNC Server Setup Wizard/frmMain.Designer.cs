@@ -94,6 +94,7 @@
             this.lblFinishTitle = new System.Windows.Forms.Label();
             this.groupBoxFinish = new System.Windows.Forms.GroupBox();
             this.groupBoxConnectDirect = new System.Windows.Forms.GroupBox();
+            this.lblRfbHostAddress = new System.Windows.Forms.Label();
             this.lblRfbPort = new System.Windows.Forms.Label();
             this.lblRfbIPAddress = new System.Windows.Forms.Label();
             this.groupBoxConnectCloud = new System.Windows.Forms.GroupBox();
@@ -105,7 +106,8 @@
             this.linkLabelUpsell = new System.Windows.Forms.LinkLabel();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
-            this.lblRfbHostAddress = new System.Windows.Forms.Label();
+            this.lblCloudNotJoinedInfo = new System.Windows.Forms.Label();
+            this.lblDisclaimer = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -217,6 +219,7 @@
             // 
             // tabPageWelcome
             // 
+            this.tabPageWelcome.Controls.Add(this.lblDisclaimer);
             this.tabPageWelcome.Controls.Add(this.groupBoxWelcome);
             this.tabPageWelcome.Controls.Add(this.lblWelcomeTitle);
             this.tabPageWelcome.Location = new System.Drawing.Point(4, 5);
@@ -236,9 +239,9 @@
             this.groupBoxWelcome.Controls.Add(this.linkSignUp);
             this.groupBoxWelcome.Controls.Add(this.lblLicenseWiz);
             this.groupBoxWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxWelcome.Location = new System.Drawing.Point(6, 23);
+            this.groupBoxWelcome.Location = new System.Drawing.Point(6, 44);
             this.groupBoxWelcome.Name = "groupBoxWelcome";
-            this.groupBoxWelcome.Size = new System.Drawing.Size(553, 262);
+            this.groupBoxWelcome.Size = new System.Drawing.Size(553, 241);
             this.groupBoxWelcome.TabIndex = 20;
             this.groupBoxWelcome.TabStop = false;
             this.groupBoxWelcome.Text = "Get Started";
@@ -266,7 +269,7 @@
             // btnLicenseWiz
             // 
             this.btnLicenseWiz.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLicenseWiz.Location = new System.Drawing.Point(9, 194);
+            this.btnLicenseWiz.Location = new System.Drawing.Point(9, 179);
             this.btnLicenseWiz.Name = "btnLicenseWiz";
             this.btnLicenseWiz.Size = new System.Drawing.Size(124, 58);
             this.btnLicenseWiz.TabIndex = 14;
@@ -289,7 +292,7 @@
             // 
             this.linkLabelGetStarted.AutoSize = true;
             this.linkLabelGetStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelGetStarted.Location = new System.Drawing.Point(159, 217);
+            this.linkLabelGetStarted.Location = new System.Drawing.Point(159, 202);
             this.linkLabelGetStarted.Name = "linkLabelGetStarted";
             this.linkLabelGetStarted.Size = new System.Drawing.Size(142, 13);
             this.linkLabelGetStarted.TabIndex = 17;
@@ -740,7 +743,7 @@
             // 
             this.lblConnectionWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblConnectionWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblConnectionWarning.Location = new System.Drawing.Point(6, 234);
+            this.lblConnectionWarning.Location = new System.Drawing.Point(6, 239);
             this.lblConnectionWarning.Name = "lblConnectionWarning";
             this.lblConnectionWarning.Size = new System.Drawing.Size(552, 35);
             this.lblConnectionWarning.TabIndex = 28;
@@ -755,7 +758,7 @@
             this.groupBoxDirect.Controls.Add(this.lblDirect);
             this.groupBoxDirect.Controls.Add(this.linkLabelDirect);
             this.groupBoxDirect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxDirect.Location = new System.Drawing.Point(6, 150);
+            this.groupBoxDirect.Location = new System.Drawing.Point(6, 155);
             this.groupBoxDirect.Name = "groupBoxDirect";
             this.groupBoxDirect.Size = new System.Drawing.Size(555, 81);
             this.groupBoxDirect.TabIndex = 27;
@@ -796,6 +799,7 @@
             // 
             // groupBoxCloud
             // 
+            this.groupBoxCloud.Controls.Add(this.lblCloudNotJoinedInfo);
             this.groupBoxCloud.Controls.Add(this.linkLabelCloudRfb);
             this.groupBoxCloud.Controls.Add(this.cbCloudRfb);
             this.groupBoxCloud.Controls.Add(this.cbCloudRelay);
@@ -804,7 +808,7 @@
             this.groupBoxCloud.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCloud.Location = new System.Drawing.Point(6, 23);
             this.groupBoxCloud.Name = "groupBoxCloud";
-            this.groupBoxCloud.Size = new System.Drawing.Size(555, 117);
+            this.groupBoxCloud.Size = new System.Drawing.Size(555, 122);
             this.groupBoxCloud.TabIndex = 26;
             this.groupBoxCloud.TabStop = false;
             this.groupBoxCloud.Text = "Cloud";
@@ -813,7 +817,7 @@
             // 
             this.linkLabelCloudRfb.AutoSize = true;
             this.linkLabelCloudRfb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelCloudRfb.Location = new System.Drawing.Point(3, 88);
+            this.linkLabelCloudRfb.Location = new System.Drawing.Point(3, 100);
             this.linkLabelCloudRfb.Name = "linkLabelCloudRfb";
             this.linkLabelCloudRfb.Size = new System.Drawing.Size(181, 13);
             this.linkLabelCloudRfb.TabIndex = 23;
@@ -848,9 +852,9 @@
             // lblCloudRfb
             // 
             this.lblCloudRfb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCloudRfb.Location = new System.Drawing.Point(183, 14);
+            this.lblCloudRfb.Location = new System.Drawing.Point(190, 14);
             this.lblCloudRfb.Name = "lblCloudRfb";
-            this.lblCloudRfb.Size = new System.Drawing.Size(366, 26);
+            this.lblCloudRfb.Size = new System.Drawing.Size(359, 26);
             this.lblCloudRfb.TabIndex = 20;
             this.lblCloudRfb.Text = "Enable connections brokered by RealVNC cloud services.\r\nRecommended for most peop" +
     "le and for connections over the Internet.";
@@ -858,9 +862,9 @@
             // lblCloudRelay
             // 
             this.lblCloudRelay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCloudRelay.Location = new System.Drawing.Point(183, 49);
+            this.lblCloudRelay.Location = new System.Drawing.Point(190, 49);
             this.lblCloudRelay.Name = "lblCloudRelay";
-            this.lblCloudRelay.Size = new System.Drawing.Size(366, 39);
+            this.lblCloudRelay.Size = new System.Drawing.Size(359, 39);
             this.lblCloudRelay.TabIndex = 22;
             this.lblCloudRelay.Text = "Allow traffic to be relayed via RealVNC services if a peer-to-peer \r\nconnection c" +
     "annot be established.\r\nThis may cause some connections to fail, based on network" +
@@ -959,6 +963,16 @@
             this.groupBoxConnectDirect.TabStop = false;
             this.groupBoxConnectDirect.Text = "Direct";
             this.groupBoxConnectDirect.Visible = false;
+            // 
+            // lblRfbHostAddress
+            // 
+            this.lblRfbHostAddress.AutoSize = true;
+            this.lblRfbHostAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRfbHostAddress.Location = new System.Drawing.Point(6, 20);
+            this.lblRfbHostAddress.Name = "lblRfbHostAddress";
+            this.lblRfbHostAddress.Size = new System.Drawing.Size(94, 13);
+            this.lblRfbHostAddress.TabIndex = 2;
+            this.lblRfbHostAddress.Text = "RFB Host Address";
             // 
             // lblRfbPort
             // 
@@ -1079,15 +1093,29 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
             // 
-            // lblRfbHostAddress
+            // lblCloudNotJoinedInfo
             // 
-            this.lblRfbHostAddress.AutoSize = true;
-            this.lblRfbHostAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRfbHostAddress.Location = new System.Drawing.Point(6, 20);
-            this.lblRfbHostAddress.Name = "lblRfbHostAddress";
-            this.lblRfbHostAddress.Size = new System.Drawing.Size(94, 13);
-            this.lblRfbHostAddress.TabIndex = 2;
-            this.lblRfbHostAddress.Text = "RFB Host Address";
+            this.lblCloudNotJoinedInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCloudNotJoinedInfo.ForeColor = System.Drawing.Color.Black;
+            this.lblCloudNotJoinedInfo.Location = new System.Drawing.Point(190, 97);
+            this.lblCloudNotJoinedInfo.Name = "lblCloudNotJoinedInfo";
+            this.lblCloudNotJoinedInfo.Size = new System.Drawing.Size(320, 19);
+            this.lblCloudNotJoinedInfo.TabIndex = 27;
+            this.lblCloudNotJoinedInfo.Text = "INFORMATION: VNC Server is not joined to the cloud.";
+            this.lblCloudNotJoinedInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblCloudNotJoinedInfo.Visible = false;
+            // 
+            // lblDisclaimer
+            // 
+            this.lblDisclaimer.AutoSize = true;
+            this.lblDisclaimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisclaimer.Location = new System.Drawing.Point(54, 26);
+            this.lblDisclaimer.Name = "lblDisclaimer";
+            this.lblDisclaimer.Size = new System.Drawing.Size(458, 13);
+            this.lblDisclaimer.TabIndex = 21;
+            this.lblDisclaimer.Text = "This is an unofficial application and is not developed or supported by RealVNC.\r\n" +
+    "";
+            this.lblDisclaimer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FrmMain
             // 
@@ -1224,6 +1252,8 @@
         private System.Windows.Forms.Label lblCloudTeam;
         private System.Windows.Forms.Label lblCloudName;
         private System.Windows.Forms.Label lblRfbHostAddress;
+        private System.Windows.Forms.Label lblCloudNotJoinedInfo;
+        private System.Windows.Forms.Label lblDisclaimer;
     }
 }
 
