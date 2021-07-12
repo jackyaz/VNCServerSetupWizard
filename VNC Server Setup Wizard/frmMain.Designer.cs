@@ -34,6 +34,7 @@
             this.splitContSubMenu = new System.Windows.Forms.SplitContainer();
             this.tabControlContent = new System.Windows.Forms.TabControl();
             this.tabPageWelcome = new System.Windows.Forms.TabPage();
+            this.lblDisclaimer = new System.Windows.Forms.Label();
             this.groupBoxWelcome = new System.Windows.Forms.GroupBox();
             this.lblWelcomeSubtitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -81,6 +82,7 @@
             this.lblDirect = new System.Windows.Forms.Label();
             this.linkLabelDirect = new System.Windows.Forms.LinkLabel();
             this.groupBoxCloud = new System.Windows.Forms.GroupBox();
+            this.lblCloudNotJoinedInfo = new System.Windows.Forms.Label();
             this.linkLabelCloudRfb = new System.Windows.Forms.LinkLabel();
             this.cbCloudRfb = new System.Windows.Forms.CheckBox();
             this.cbCloudRelay = new System.Windows.Forms.CheckBox();
@@ -89,6 +91,8 @@
             this.lblConnTitle = new System.Windows.Forms.Label();
             this.tabPageFinish = new System.Windows.Forms.TabPage();
             this.groupBoxSave = new System.Windows.Forms.GroupBox();
+            this.lblSettingsToSave2 = new System.Windows.Forms.Label();
+            this.lblSettingsToSave1 = new System.Windows.Forms.Label();
             this.lblSaveInfo = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.lblFinishTitle = new System.Windows.Forms.Label();
@@ -106,8 +110,6 @@
             this.linkLabelUpsell = new System.Windows.Forms.LinkLabel();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
-            this.lblCloudNotJoinedInfo = new System.Windows.Forms.Label();
-            this.lblDisclaimer = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContMenu)).BeginInit();
             this.splitContMenu.Panel1.SuspendLayout();
             this.splitContMenu.Panel2.SuspendLayout();
@@ -228,6 +230,18 @@
             this.tabPageWelcome.Size = new System.Drawing.Size(567, 291);
             this.tabPageWelcome.TabIndex = 0;
             this.tabPageWelcome.UseVisualStyleBackColor = true;
+            // 
+            // lblDisclaimer
+            // 
+            this.lblDisclaimer.AutoSize = true;
+            this.lblDisclaimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisclaimer.Location = new System.Drawing.Point(54, 26);
+            this.lblDisclaimer.Name = "lblDisclaimer";
+            this.lblDisclaimer.Size = new System.Drawing.Size(458, 13);
+            this.lblDisclaimer.TabIndex = 21;
+            this.lblDisclaimer.Text = "This is an unofficial application and is not developed or supported by RealVNC.\r\n" +
+    "";
+            this.lblDisclaimer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupBoxWelcome
             // 
@@ -371,7 +385,7 @@
             this.btnSetVNCPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSetVNCPassword.Location = new System.Drawing.Point(108, 36);
             this.btnSetVNCPassword.Name = "btnSetVNCPassword";
-            this.btnSetVNCPassword.Size = new System.Drawing.Size(110, 23);
+            this.btnSetVNCPassword.Size = new System.Drawing.Size(175, 23);
             this.btnSetVNCPassword.TabIndex = 31;
             this.btnSetVNCPassword.Text = "Set VNC Password";
             this.btnSetVNCPassword.UseVisualStyleBackColor = true;
@@ -643,6 +657,7 @@
             this.txtPermissionsCustom.Name = "txtPermissionsCustom";
             this.txtPermissionsCustom.Size = new System.Drawing.Size(471, 20);
             this.txtPermissionsCustom.TabIndex = 28;
+            this.txtPermissionsCustom.TextChanged += new System.EventHandler(this.PermissionsCustom_TextChanged);
             // 
             // radioAdministrators
             // 
@@ -813,6 +828,18 @@
             this.groupBoxCloud.TabStop = false;
             this.groupBoxCloud.Text = "Cloud";
             // 
+            // lblCloudNotJoinedInfo
+            // 
+            this.lblCloudNotJoinedInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCloudNotJoinedInfo.ForeColor = System.Drawing.Color.Black;
+            this.lblCloudNotJoinedInfo.Location = new System.Drawing.Point(190, 97);
+            this.lblCloudNotJoinedInfo.Name = "lblCloudNotJoinedInfo";
+            this.lblCloudNotJoinedInfo.Size = new System.Drawing.Size(320, 19);
+            this.lblCloudNotJoinedInfo.TabIndex = 27;
+            this.lblCloudNotJoinedInfo.Text = "INFORMATION: VNC Server is not joined to the cloud.";
+            this.lblCloudNotJoinedInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblCloudNotJoinedInfo.Visible = false;
+            // 
             // linkLabelCloudRfb
             // 
             this.linkLabelCloudRfb.AutoSize = true;
@@ -894,15 +921,35 @@
             // 
             // groupBoxSave
             // 
+            this.groupBoxSave.Controls.Add(this.lblSettingsToSave2);
+            this.groupBoxSave.Controls.Add(this.lblSettingsToSave1);
             this.groupBoxSave.Controls.Add(this.lblSaveInfo);
             this.groupBoxSave.Controls.Add(this.btnSave);
             this.groupBoxSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxSave.Location = new System.Drawing.Point(6, 23);
             this.groupBoxSave.Name = "groupBoxSave";
-            this.groupBoxSave.Size = new System.Drawing.Size(553, 82);
+            this.groupBoxSave.Size = new System.Drawing.Size(553, 92);
             this.groupBoxSave.TabIndex = 6;
             this.groupBoxSave.TabStop = false;
             this.groupBoxSave.Text = "Save settings";
+            // 
+            // lblSettingsToSave2
+            // 
+            this.lblSettingsToSave2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsToSave2.Location = new System.Drawing.Point(224, 38);
+            this.lblSettingsToSave2.Name = "lblSettingsToSave2";
+            this.lblSettingsToSave2.Size = new System.Drawing.Size(185, 44);
+            this.lblSettingsToSave2.TabIndex = 6;
+            this.lblSettingsToSave2.Text = "Settings that will be applied:\r\na\r\na";
+            // 
+            // lblSettingsToSave1
+            // 
+            this.lblSettingsToSave1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsToSave1.Location = new System.Drawing.Point(6, 38);
+            this.lblSettingsToSave1.Name = "lblSettingsToSave1";
+            this.lblSettingsToSave1.Size = new System.Drawing.Size(217, 44);
+            this.lblSettingsToSave1.TabIndex = 5;
+            this.lblSettingsToSave1.Text = "Settings that will be applied:";
             // 
             // lblSaveInfo
             // 
@@ -917,11 +964,11 @@
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(9, 38);
+            this.btnSave.Location = new System.Drawing.Point(415, 43);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 34);
             this.btnSave.TabIndex = 3;
-            this.btnSave.Text = "Save configuration";
+            this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Visible = false;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
@@ -943,9 +990,9 @@
             this.groupBoxFinish.Controls.Add(this.btnDone);
             this.groupBoxFinish.Controls.Add(this.lblConnectionInfo);
             this.groupBoxFinish.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxFinish.Location = new System.Drawing.Point(6, 111);
+            this.groupBoxFinish.Location = new System.Drawing.Point(6, 121);
             this.groupBoxFinish.Name = "groupBoxFinish";
-            this.groupBoxFinish.Size = new System.Drawing.Size(553, 174);
+            this.groupBoxFinish.Size = new System.Drawing.Size(553, 164);
             this.groupBoxFinish.TabIndex = 5;
             this.groupBoxFinish.TabStop = false;
             this.groupBoxFinish.Text = "Get connected";
@@ -1029,9 +1076,9 @@
             // btnDone
             // 
             this.btnDone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDone.Location = new System.Drawing.Point(232, 127);
+            this.btnDone.Location = new System.Drawing.Point(226, 127);
             this.btnDone.Name = "btnDone";
-            this.btnDone.Size = new System.Drawing.Size(88, 41);
+            this.btnDone.Size = new System.Drawing.Size(100, 34);
             this.btnDone.TabIndex = 2;
             this.btnDone.Text = "Done";
             this.btnDone.UseVisualStyleBackColor = true;
@@ -1092,30 +1139,6 @@
             this.btnBack.Text = "<< Back";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
-            // 
-            // lblCloudNotJoinedInfo
-            // 
-            this.lblCloudNotJoinedInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCloudNotJoinedInfo.ForeColor = System.Drawing.Color.Black;
-            this.lblCloudNotJoinedInfo.Location = new System.Drawing.Point(190, 97);
-            this.lblCloudNotJoinedInfo.Name = "lblCloudNotJoinedInfo";
-            this.lblCloudNotJoinedInfo.Size = new System.Drawing.Size(320, 19);
-            this.lblCloudNotJoinedInfo.TabIndex = 27;
-            this.lblCloudNotJoinedInfo.Text = "INFORMATION: VNC Server is not joined to the cloud.";
-            this.lblCloudNotJoinedInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblCloudNotJoinedInfo.Visible = false;
-            // 
-            // lblDisclaimer
-            // 
-            this.lblDisclaimer.AutoSize = true;
-            this.lblDisclaimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisclaimer.Location = new System.Drawing.Point(54, 26);
-            this.lblDisclaimer.Name = "lblDisclaimer";
-            this.lblDisclaimer.Size = new System.Drawing.Size(458, 13);
-            this.lblDisclaimer.TabIndex = 21;
-            this.lblDisclaimer.Text = "This is an unofficial application and is not developed or supported by RealVNC.\r\n" +
-    "";
-            this.lblDisclaimer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FrmMain
             // 
@@ -1254,6 +1277,8 @@
         private System.Windows.Forms.Label lblRfbHostAddress;
         private System.Windows.Forms.Label lblCloudNotJoinedInfo;
         private System.Windows.Forms.Label lblDisclaimer;
+        private System.Windows.Forms.Label lblSettingsToSave1;
+        private System.Windows.Forms.Label lblSettingsToSave2;
     }
 }
 

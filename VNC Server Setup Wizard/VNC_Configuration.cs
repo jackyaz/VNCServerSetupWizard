@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace VNC_Server_Setup_Wizard
@@ -23,7 +24,7 @@ namespace VNC_Server_Setup_Wizard
         /// <summary>
         /// Properties for class
         /// </summary>
-        public PlanType Plan { get; private set; }
+        public PlanType Plan { get;  set; }
         public AuthenticationType Authentication { get; set; }
         public EncryptionType Encryption { get; set; }
         public PermissionsType Permissions { get; set; }
@@ -277,6 +278,9 @@ namespace VNC_Server_Setup_Wizard
                     case PermissionsType.CurrentUser:
                         RegistryManagement.SetRegistryValue(RegHives.HKLM, "Permissions", System.Security.Principal.WindowsIdentity.GetCurrent().User.ToString() + ":d");
                         break;
+                    case PermissionsType.Custom:
+                        RegistryManagement.SetRegistryValue(RegHives.HKLM, "Permissions", PermissionsString);
+                        break;
                 }
             }
             catch { return false; }
@@ -300,6 +304,84 @@ namespace VNC_Server_Setup_Wizard
             catch { return false; }
 
             return true;
+        }
+
+        public string[] PrintConfiguration()
+        {
+            string[] printedconfiguration = new string[2];
+
+            // Authentication
+            printedconfiguration[0] = "Authentication: " + Authentication.ToString() + Environment.NewLine;
+
+            // Encryption
+            switch (Encryption)
+            {
+                case EncryptionType.AlwaysMaximum:
+                    printedconfiguration[1] = "Encryption: 256-bit AES" + Environment.NewLine;
+                    break;
+                case EncryptionType.AlwaysOn:
+                    printedconfiguration[1] = "Encryption: 128-bit AES" + Environment.NewLine;
+                    break;
+            }
+
+            // Access Control
+            switch (Permissions)
+            {
+                case PermissionsType.Adminstrators:
+                    printedconfiguration[0] += "Users who can connect: Adminstrators" + Environment.NewLine;
+                    break;
+                case PermissionsType.Users:
+                    printedconfiguration[0] += "Users who can connect: All users" + Environment.NewLine;
+                    break;
+                case PermissionsType.CurrentUser:
+                    printedconfiguration[0] += "Users who can connect: Current user" + Environment.NewLine;
+                    break;
+                case PermissionsType.Custom:
+                    printedconfiguration[0] += "Users who can connect: Custom" + Environment.NewLine;
+                    break;
+            }
+
+            // Attended Access
+            printedconfiguration[1] += "Attended Access: " + AttendedAccess.ToString() + Environment.NewLine;
+
+            // Connections
+            if (CloudEnabled)
+            {
+                if (CloudRfb && CloudRelay)
+                {
+                    printedconfiguration[0] += "Cloud access: Enabled, allow relay";
+                }
+                else if (CloudRfb && !CloudRelay)
+                {
+                    printedconfiguration[0] += "Cloud access: Enabled, no relay";
+                }
+                else
+                {
+                    printedconfiguration[0] += "Cloud access: Disabled";
+                }
+            }
+            else
+            {
+                printedconfiguration[0] += "Cloud access: Disabled";
+            }
+
+            if (Plan == PlanType.Enterprise)
+            {
+                if (DirectRfb)
+                {
+                    printedconfiguration[1] += "Direct access: Enabled";
+                }
+                else
+                {
+                    printedconfiguration[1] += "Direct access: Disabled";
+                }
+            }
+            else
+            {
+                printedconfiguration[1] += "Direct access: Disabled";
+            }
+
+            return printedconfiguration;
         }
     }
 }

@@ -28,8 +28,6 @@ namespace VNC_Server_Setup_Wizard
         private void FrmMain_Shown(object sender, EventArgs e)
         {
             listBxMenu.SelectedIndex = 0;
-            //listViewUsersGroups.Columns[1].Width = -2;
-            //vncconfig.Plan = VNC_Configuration.PlanType.Home;
             SetOptionsFromConfig();
             SetAvailableOptionsFromPlan();
             lblSubType.Text = "Detected subscription type as: " + vncconfig.Plan;
@@ -90,6 +88,8 @@ namespace VNC_Server_Setup_Wizard
                 case VNC_Configuration.AuthenticationType.VncAuth:
                     radioVNCAuth.Checked = true;
                     btnSetVNCPassword.Visible = true;
+                    if (RegistryManagement.GetRegistryValue(RegHives.HKLM, "Password").Length != 0) { btnSetVNCPassword.Text = "Change VNC Password"; }
+                    else { btnSetVNCPassword.Text = "Set VNC Password"; }
                     break;
                 case VNC_Configuration.AuthenticationType.SystemAuth:
                     radioSystemAuth.Checked = true;
@@ -168,7 +168,6 @@ namespace VNC_Server_Setup_Wizard
 
         #region FormUI
         private void ButtonState(bool showhide, Button button) { button.Enabled = showhide; button.Visible = showhide; }
-        //private void CheckboxState(bool enabledisable, CheckBox chkbox) { chkbox.Enabled = enabledisable; chkbox.Checked = enabledisable; }
 
         private void NavState(bool enabledisable)
         {
@@ -209,6 +208,9 @@ namespace VNC_Server_Setup_Wizard
                 ButtonState(false, btnNext);
                 ButtonState(true, btnBack);
                 ButtonState(true, btnSave);
+                string[] printedconfiguration = vncconfig.PrintConfiguration();
+                lblSettingsToSave1.Text = printedconfiguration[0];
+                lblSettingsToSave2.Text = printedconfiguration[1];
             }
             else
             {
@@ -310,6 +312,8 @@ namespace VNC_Server_Setup_Wizard
                 vncconfig.Authentication = VNC_Configuration.AuthenticationType.VncAuth;
                 lblPasswordWarning.Visible = false;
                 btnSetVNCPassword.Visible = true;
+                if (RegistryManagement.GetRegistryValue(RegHives.HKLM, "Password").Length != 0) { btnSetVNCPassword.Text = "Change VNC Password"; }
+                else { btnSetVNCPassword.Text = "Set VNC Password"; }
                 AccessControlState(false);
             }
             else if (radioSystemAuth.Checked)
@@ -343,8 +347,13 @@ namespace VNC_Server_Setup_Wizard
 
         private void SetVNCPassword_Click(object sender, EventArgs e)
         {
-            FrmVNCPassword frmpwd = new FrmVNCPassword();
-            frmpwd.ShowDialog();
+            Process ps = new Process();
+            ProcessStartInfo pssi = new ProcessStartInfo(@"C:\Program Files\RealVNC\VNC Server\vncpasswd.exe");
+            pssi.Arguments = "-service";
+            ps.StartInfo = pssi;
+            ps.Start();
+            ps.WaitForExit();
+            if (ps.ExitCode == 0) { btnSetVNCPassword.Text = "Change VNC Password"; }
         }
 
         #endregion
@@ -379,6 +388,12 @@ namespace VNC_Server_Setup_Wizard
                 linkLabelPermissionsCreator.Visible = true;
             }
         }
+
+        private void PermissionsCustom_TextChanged(object sender, EventArgs e)
+        {
+            vncconfig.PermissionsString = txtPermissionsCustom.Text;
+        }
+
         private void QryConn_CheckedChanged(object sender, EventArgs e)
         {
             if (cbQryConn.Checked == true)
