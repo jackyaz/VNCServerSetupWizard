@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("VNC Server Setup Wizard")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This wizard will help you get up and running with VNC Server, and enable you to start enjoying the benefits of VNC Connect by RealVNC. This is an unofficial application and is not developed or supported by RealVNC.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("VNC Server Setup Wizard")]
